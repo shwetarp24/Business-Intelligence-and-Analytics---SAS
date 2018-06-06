@@ -1,0 +1,31 @@
+ 
+                                                                                                                                                                                                                                                                
+ 
+ 
+Summary Statistics for Class Targets
+
+Data=DATA
+
+            Numeric    Formatted    Frequency
+Variable     Value       Value        Count      Percent         Label
+
+RESPOND        0           0          45617      94.3358    response target
+RESPOND        1           1           2739       5.6642    response target
+
+
+Data=TRAIN
+
+            Numeric    Formatted    Frequency
+Variable     Value       Value        Count      Percent         Label
+
+RESPOND        0           0          30410      94.3385    response target
+RESPOND        1           1           1825       5.6615    response target
+
+
+Data=VALIDATE
+
+            Numeric    Formatted    Frequency
+Variable     Value       Value        Count      Percent         Label
+
+RESPOND        0           0          15207      94.3304    response target
+RESPOND        1           1            914       5.6696    response target

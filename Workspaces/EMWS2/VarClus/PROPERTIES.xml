@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?><_ROOT_  Location="CATALOG" Catalog="SASHELP.EMEXPL.VARIABLECLUSTERING.SOURCE" HideVariable="Y"
+ MaxClus="." ClusSource="CORR" ClusHierachy="Y" IncludeClassVar="Y" TwoStageClus="AUTO"
+ SuppressSampWarn="N" ExportedComp="BESTVARWITHCOMP" MaxEigen="." Proportion="0" PrintOption="SHORT"
+ ForceRun="N" RunAction="Train" Component="VariableClustering" DataNeeded="Y" RawCreateTime="1808275560.1"
+ CreateTime="20APR2017:02:46:00" RunId="ccff4ec4-febc-4c70-9e31-88de32a76d3a">
+<VARIABLEPROPERTIES/>
+<FILEPROPERTIES ><![CDATA[
+USERTRAINCODE
+USERSCORECODE
+USERREPORTCODE
+]]>
+</FILEPROPERTIES></_ROOT_>

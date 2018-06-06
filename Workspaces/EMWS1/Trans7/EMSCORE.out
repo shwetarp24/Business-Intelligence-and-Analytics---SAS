@@ -1,0 +1,10 @@
+ 
+                                                                                                                                                                                                                                                                
+ 
+Formula Transformations
+(maximum 500 observations printed)
+
+Variable             Measurement
+  Name      Role        Level                                                 Formula
+
+  RFM       INPUT     INTERVAL      substr(PCTL_GiftTimeLast_Rev,1,2)||substr(PCTL_GiftCntAll,1,2)||substr(PCTL_GiftDolAll,1,2)

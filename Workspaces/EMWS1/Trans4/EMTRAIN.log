@@ -1,0 +1,171 @@
+*------------------------------------------------------------*
+* Training Log
+Date:                April 17, 2017
+Time:                01:22:14
+*------------------------------------------------------------*
+10867  proc freq data=EMWS1.Trans4_VariableSet noprint;
+10868  table ROLE*LEVEL/out=WORK.Trans4META;
+10869  run;
+
+NOTE: There were 27 observations read from the data set EMWS1.TRANS4_VARIABLESET.
+NOTE: The data set WORK.TRANS4META has 5 observations and 4 variables.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+10870  proc print data=WORK.Trans4META label noobs;
+10871  var ROLE LEVEL COUNT;
+10872  label ROLE = "%sysfunc(sasmsg(sashelp.dmine, meta_role_vlabel, NOQUOTE))" LEVEL = "%sysfunc(sasmsg(sashelp.dmine, meta_level_vlabel, NOQUOTE))" COUNT = "%sysfunc(sasmsg(sashelp.dmine, rpt_count_vlabel, NOQUOTE))";
+10873  title9 ' ';
+10874  title10 "%sysfunc(sasmsg(sashelp.dmine, rpt_varSummary_title  , NOQUOTE))";
+10875  run;
+
+NOTE: There were 5 observations read from the data set WORK.TRANS4META.
+NOTE: The PROCEDURE PRINT printed page 1.
+NOTE: PROCEDURE PRINT used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+10876  title10;
+
+10877  data WORK.M0OIFBHA;
+10878  set WORK.M0OIFBHA;
+10879  if (METHOD='NONE' and ROLE ne 'FREQ') or (role = 'REJECTED' and METHOD = 'DEFAULT') then delete;
+10880  run;
+
+NOTE: There were 27 observations read from the data set WORK.M0OIFBHA.
+NOTE: The data set WORK.M0OIFBHA has 26 observations and 22 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+NOTE: View EMWS1.IDS2_DATA.VIEW used (Total process time):
+      real time           0.04 seconds
+      cpu time            0.04 seconds
+      
+NOTE: There were 9686 observations read from the data set BIA.PVA97NK.
+10945  *------------------------------------------------------------*;
+10946  * Trans: Computing Summary Statistics;
+10947  *------------------------------------------------------------*;
+10948  data WORK.M0M7H0I8;
+10949  set WORK.M0M7H0I8;
+10950  if (role = 'REJECTED') then role = 'INPUT';
+10951  run;
+
+NOTE: There were 26 observations read from the data set WORK.M0M7H0I8.
+NOTE: The data set WORK.M0M7H0I8 has 26 observations and 22 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+10952  *------------------------------------------------------------* ;
+10953  * EM: DMDBClass Macro ;
+10954  *------------------------------------------------------------* ;
+10955  %macro DMDBClass;
+10956      DemCluster(ASC) DemGender(ASC) DemHomeOwner(ASC) StatusCat96NK(ASC)
+10957     StatusCatStarAll(ASC) TargetB(DESC)
+10958  %mend DMDBClass;
+10959  *------------------------------------------------------------* ;
+10960  * EM: DMDBVar Macro ;
+10961  *------------------------------------------------------------* ;
+10962  %macro DMDBVar;
+10963      DemAge DemMedHomeValue DemMedIncome DemPctVeterans GiftAvg36 GiftAvgAll
+10964     GiftAvgCard36 GiftAvgLast GiftCnt36 GiftCntAll GiftCntCard36 GiftCntCardAll
+10965     GiftTimeFirst GiftTimeLast PromCnt12 PromCnt36 PromCntAll PromCntCard12
+10966     PromCntCard36 PromCntCardAll
+10967  %mend DMDBVar;
+10968  *------------------------------------------------------------*;
+10969  * EM: Create DMDB;
+10970  *------------------------------------------------------------*;
+10971  proc dmdb batch data=EMWS1.Ids2_DATA
+10972  dmdbcat=WORK.EM_DMDB
+10973  classout=WORK.Transclassout
+10974  maxlevel = 513
+10975  ;
+10976  class %DMDBClass;
+10977  var %DMDBVar;
+10978  target
+10979  TargetB
+10980  ;
+10981  run;
+
+NOTE: Records processed = 9686   Memory used = 511K.
+NOTE: View EMWS1.IDS2_DATA.VIEW used (Total process time):
+      real time           0.04 seconds
+      cpu time            0.04 seconds
+      
+NOTE: There were 9686 observations read from the data set BIA.PVA97NK.
+NOTE: There were 9686 observations read from the data set EMWS1.IDS2_DATA.
+NOTE: The data set WORK.TRANSCLASSOUT has 69 observations and 9 variables.
+NOTE: PROCEDURE DMDB used (Total process time):
+      real time           0.06 seconds
+      cpu time            0.06 seconds
+      
+
+10982  quit;
+10983  *--- end code ---*;
+
+10984  data WORK.TransINTERVALMETA;
+10985  set WORK.M0OIFBHA;
+10986  if LEVEL ne 'INTERVAL' then delete;
+10987  run;
+
+NOTE: There were 26 observations read from the data set WORK.M0OIFBHA.
+NOTE: The data set WORK.TRANSINTERVALMETA has 20 observations and 22 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+10988  *------------------------------------------------------------*;
+10989  * Trans: Determining Variables to Scale;
+10990  *------------------------------------------------------------*;
+10991  data WORK.M3CB8MPS;
+10992  set WORK.M3CB8MPS;
+10993  where (TYPE="N" and (METHOD in("MAX_NORM", "MAX_CORR", "EQUALIZE", "OP_MAX_NORM", "OP_EQUALIZE"))) or (ROLE eq "FREQ");
+10994  run;
+
+NOTE: There were 0 observations read from the data set WORK.M3CB8MPS.
+      WHERE ((TYPE='N') and METHOD in ('EQUALIZE', 'MAX_CORR', 'MAX_NORM', 'OP_EQUALIZE', 'OP_MAX_NORM')) or (ROLE='FREQ');
+NOTE: The data set WORK.M3CB8MPS has 0 observations and 22 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+NOTE: View EMWS1.IDS2_DATA.VIEW used (Total process time):
+      real time           0.17 seconds
+      cpu time            0.17 seconds
+      
+10997  %exploreSample(DATA=EMWS1.Ids2_DATA, OUTPUT=EMWS1.Trans4_SAMPLE_DATA, METADATA=EMWS1.Ids2_CMeta_DATA, VARS=, METHOD=RANDOM, SIZE=MAX, ALPHA=0.01, PVALUE=0.01, SEED=12345);
+NOTE: Fileref X has been deassigned.
+NOTE: EXPLOREOBS EMWS1.Ids2_DATA : vars= 28 : recl= 205 : max=20000 : def= 2000
+PERFORMANCE  DETAILS
+NOTE: View EMWS1.IDS2_DATA.VIEW used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.03 seconds
+      
+NOTE: There were 9686 observations read from the data set BIA.PVA97NK.
+NOTE: PROCEDURE SQL used (Total process time):
+      real time           0.04 seconds
+      cpu time            0.04 seconds
+      
+
+
+NOTE: View EMWS1.IDS2_DATA.VIEW used (Total process time):
+      real time           0.04 seconds
+      cpu time            0.03 seconds
+      
+NOTE: There were 9686 observations read from the data set BIA.PVA97NK.
+NOTE: There were 9686 observations read from the data set EMWS1.IDS2_DATA.
+NOTE: The data set EMWS1.TRANS4_SAMPLE_DATA has 9686 observations and 28 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.54 seconds
+      cpu time            0.06 seconds
+      
+
+

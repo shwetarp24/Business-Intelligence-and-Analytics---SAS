@@ -1,0 +1,45 @@
+*------------------------------------------------------------*
+ Node = 3
+*------------------------------------------------------------*
+if $ last 24 months >= 121.2
+then 
+ Tree Node Identifier   = 3
+ Number of Observations = 3546
+ Predicted: RESPOND=1 = 0.13
+ Predicted: RESPOND=0 = 0.87
+ 
+*------------------------------------------------------------*
+ Node = 5
+*------------------------------------------------------------*
+if months since 1st >= 1.5 or MISSING
+AND $ last 24 months < 121.2 or MISSING
+then 
+ Tree Node Identifier   = 5
+ Number of Observations = 28658
+ Predicted: RESPOND=1 = 0.05
+ Predicted: RESPOND=0 = 0.95
+ 
+*------------------------------------------------------------*
+ Node = 8
+*------------------------------------------------------------*
+if months since 1st < 1.5
+AND days since last < 46.5 or MISSING
+AND $ last 24 months < 121.2 or MISSING
+then 
+ Tree Node Identifier   = 8
+ Number of Observations = 22
+ Predicted: RESPOND=1 = 0.95
+ Predicted: RESPOND=0 = 0.05
+ 
+*------------------------------------------------------------*
+ Node = 9
+*------------------------------------------------------------*
+if months since 1st < 1.5
+AND days since last >= 46.5
+AND $ last 24 months < 121.2 or MISSING
+then 
+ Tree Node Identifier   = 9
+ Number of Observations = 9
+ Predicted: RESPOND=1 = 0.11
+ Predicted: RESPOND=0 = 0.89
+ 

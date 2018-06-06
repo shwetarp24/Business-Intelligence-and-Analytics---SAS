@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?><_ROOT_  DataSource="organics" Scope="LOCAL" Role="RAW" Library="BIA" Table="ORGANICS" NCols="13"
+ NObs="22223" NBytes="2171904" Segment="" DataSourceRole="RAW" OutputType="VIEW" ForceRun="N"
+ ComputeStatistics="N" DataSelection="DATASOURCE" NewTable="" MetaAdvisor="BASIC"
+ ApplyIntervalLevelLowerLimit="Y" IntervalLowerLimit="20" ApplyMaxPercentMissing="Y"
+ MaxPercentMissing="50" ApplyMaxClassLevels="Y" MaxClassLevels="20" IdentifyEmptyColumns="Y"
+ VariableValidation="STRICT" NewVariableRole="REJECT" DropMapVariables="Y" DsId="organics"
+ DsSampleName="" DsSampleSizeType="" DsSampleSize="" DsCreatedBy="pkumari1" DsCreateDate="1808188155.9"
+ DsModifiedBy="pkumari1" DsModifyDate="1808188156" DsScope="LOCAL" Sample="D" SampleSizeType="PERCENT"
+ SampleSizePercent="20" SampleSizeObs="10000" DBPassThrough="Y" RunAction="Train"
+ Component="DataSource" RawCreateTime="1808265593.5" CreateTime="19APR2017:23:59:54"
+ Description="" Data="BIA.ORGANICS" CMeta="WORK.M262KIJD" RunId="66d4d78c-a87a-496a-95ba-977f8aa6283d"
+ RawLastTimeRun="1808265628.1" RawRunTime="6.2349998951" LastTimeRun="20APR2017:00:00:28"
+ RunTime="0 Hr. 0 Min. 6.23 Sec.">
+<VARIABLEPROPERTIES/>
+<FILEPROPERTIES/>
+</_ROOT_>

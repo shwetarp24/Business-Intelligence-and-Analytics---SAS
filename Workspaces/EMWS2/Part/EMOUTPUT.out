@@ -1,0 +1,76 @@
+*------------------------------------------------------------*
+User:                pkumari1
+Date:                April 18, 2017
+Time:                15:25:53
+*------------------------------------------------------------*
+* Training Output
+*------------------------------------------------------------*
+ 
+ 
+ 
+ 
+Variable Summary
+ 
+            Measurement    Frequency
+Role           Level         Count
+ 
+ID           INTERVAL           1
+INPUT        BINARY             3
+INPUT        INTERVAL          86
+INPUT        NOMINAL            1
+REJECTED     INTERVAL           4
+REJECTED     NOMINAL            2
+TARGET       BINARY             1
+ 
+ 
+ 
+ 
+Partition Summary
+ 
+                                     Number of
+Type             Data Set          Observations
+ 
+DATA        EMWS2.Ids_DATA             48356
+TRAIN       EMWS2.Part_TRAIN           32235
+VALIDATE    EMWS2.Part_VALIDATE        16121
+
+
+*------------------------------------------------------------*
+* Score Output
+*------------------------------------------------------------*
+
+
+*------------------------------------------------------------*
+* Report Output
+*------------------------------------------------------------*
+ 
+ 
+ 
+ 
+Summary Statistics for Class Targets
+ 
+Data=DATA
+ 
+            Numeric    Formatted    Frequency
+Variable     Value       Value        Count      Percent         Label
+ 
+RESPOND        0           0          45617      94.3358    response target
+RESPOND        1           1           2739       5.6642    response target
+ 
+ 
+Data=TRAIN
+ 
+            Numeric    Formatted    Frequency
+Variable     Value       Value        Count      Percent         Label
+ 
+RESPOND        0           0          30410      94.3385    response target
+RESPOND        1           1           1825       5.6615    response target
+ 
+ 
+Data=VALIDATE
+ 
+            Numeric    Formatted    Frequency
+Variable     Value       Value        Count      Percent         Label
+ 
+RESPOND        0           0          15207      94.3304    response target
+RESPOND        1           1            914       5.6696    response target

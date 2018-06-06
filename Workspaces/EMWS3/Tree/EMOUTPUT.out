@@ -1,0 +1,289 @@
+*------------------------------------------------------------*
+User:                pkumari1
+Date:                April 20, 2017
+Time:                01:31:35
+*------------------------------------------------------------*
+* Training Output
+*------------------------------------------------------------*
+ 
+ 
+ 
+ 
+Variable Summary
+ 
+            Measurement    Frequency
+Role           Level         Count
+ 
+ID           INTERVAL          1
+ID           NOMINAL           1
+INPUT        INTERVAL          4
+INPUT        NOMINAL           5
+REJECTED     INTERVAL          1
+REJECTED     NOMINAL           1
+TARGET       BINARY            1
+ 
+ 
+ 
+ 
+Model Events
+ 
+                                     Number
+                      Measurement      of
+ Target      Event       Level       Levels      Order                  Label
+ 
+TargetBuy      1        BINARY          2      Descending    Organics Purchase Indicator
+ 
+ 
+ 
+ 
+Predicted and decision variables
+ 
+Type           Variable      Label
+ 
+TARGET       TargetBuy       Organics Purchase Indicator
+PREDICTED    P_TargetBuy1    Predicted: TargetBuy=1
+RESIDUAL     R_TargetBuy1    Residual: TargetBuy=1
+PREDICTED    P_TargetBuy0    Predicted: TargetBuy=0
+RESIDUAL     R_TargetBuy0    Residual: TargetBuy=0
+FROM         F_TargetBuy     From: TargetBuy
+INTO         I_TargetBuy     Into: TargetBuy
+
+
+*------------------------------------------------------------*
+* Score Output
+*------------------------------------------------------------*
+
+
+*------------------------------------------------------------*
+* Report Output
+*------------------------------------------------------------*
+ 
+ 
+ 
+Variable Importance
+ 
+                                                                                          Ratio of
+                                Number of                                               Validation
+Variable                        Splitting                            Validation        to Training
+Name         Label                Rules           Importance         Importance         Importance
+ 
+DemAge       Age                     7                1.0000             1.0000             1.0000
+DemAffl      Affluence Grade        14                0.8477             0.8244             0.9726
+DemGender    Gender                  7                0.5310             0.6371             1.1997
+ 
+ 
+ 
+Tree Leaf Report
+ 
+                                 Training
+Node               Training       Percent     Validation     Validation
+ Id     Depth    Observations        1       Observations     Percent 1
+ 
+ 43       5          1464          0.16          1462           0.14
+ 57       6          1271          0.05          1284           0.04
+ 54       6          1026          0.20          1043           0.23
+ 48       5           869          0.13           916           0.12
+ 56       6           659          0.01           630           0.02
+ 52       6           636          0.06           592           0.08
+ 49       5           635          0.06           644           0.06
+ 55       6           542          0.31           504           0.31
+ 29       4           419          0.47           405           0.54
+ 32       5           334          0.61           366           0.62
+ 16       4           305          0.34           330           0.40
+ 36       5           290          0.74           287           0.76
+ 38       5           283          0.80           284           0.77
+ 40       5           274          0.42           299           0.34
+ 28       4           267          0.24           281           0.22
+ 47       5           253          0.10           258           0.08
+ 19       4           231          0.13           265           0.13
+ 34       5           219          0.37           185           0.34
+ 39       5           201          0.94           192           0.94
+ 33       5           197          0.43           187           0.43
+ 45       5           170          0.45           167           0.45
+ 35       5           150          0.18           143           0.15
+ 37       5           114          0.54            94           0.63
+ 50       5            80          0.74            71           0.72
+ 41       5            71          0.62            60           0.52
+ 53       6            56          0.21            53           0.21
+ 23       4            54          0.89            74           0.82
+ 31       4            31          1.00            25           0.96
+ 51       5            11          0.27            10           0.10
+ 
+ 
+ 
+ 
+Fit Statistics
+ 
+Target=TargetBuy Target Label=Organics Purchase Indicator
+ 
+   Fit
+Statistics    Statistics Label                 Train    Validation
+ 
+  _NOBS_      Sum of Frequencies            11112.00     11111.00
+  _MISC_      Misclassification Rate            0.19         0.19
+  _MAX_       Maximum Absolute Error            0.99         1.00
+  _SSE_       Sum of Squared Errors          2952.71      2950.48
+  _ASE_       Average Squared Error             0.13         0.13
+  _RASE_      Root Average Squared Error        0.36         0.36
+  _DIV_       Divisor for ASE               22224.00     22222.00
+  _DFT_       Total Degrees of Freedom      11112.00          .
+ 
+ 
+ 
+ 
+Classification Table
+ 
+Data Role=TRAIN Target Variable=TargetBuy Target Label=Organics Purchase Indicator
+ 
+                       Target        Outcome     Frequency       Total
+Target    Outcome    Percentage    Percentage      Count      Percentage
+ 
+  0          0         82.6393       95.4420        7978        71.7963
+  1          0         17.3607       60.8790        1676        15.0828
+  0          1         26.1317        4.5580         381         3.4287
+  1          1         73.8683       39.1210        1077         9.6922
+ 
+ 
+Data Role=VALIDATE Target Variable=TargetBuy Target Label=Organics Purchase Indicator
+ 
+                       Target        Outcome     Frequency       Total
+Target    Outcome    Percentage    Percentage      Count      Percentage
+ 
+  0          0         82.6154       95.4540        7979        71.8117
+  1          0         17.3846       61.0102        1679        15.1112
+  0          1         26.1528        4.5460         380         3.4200
+  1          1         73.8472       38.9898        1073         9.6571
+ 
+ 
+ 
+ 
+Event Classification Table
+ 
+Data Role=TRAIN Target=TargetBuy Target Label=Organics Purchase Indicator
+ 
+  False       True        False       True
+Negative    Negative    Positive    Positive
+ 
+  1676        7978         381        1077
+ 
+ 
+Data Role=VALIDATE Target=TargetBuy Target Label=Organics Purchase Indicator
+ 
+  False       True        False       True
+Negative    Negative    Positive    Positive
+ 
+  1679        7979         380        1073
+ 
+ 
+ 
+ 
+Assessment Score Rankings
+ 
+Data Role=TRAIN Target Variable=TargetBuy Target Label=Organics Purchase Indicator
+ 
+                                                                                    Mean
+                            Cumulative       %      Cumulative     Number of     Posterior
+Depth      Gain     Lift       Lift      Response   % Response   Observations   Probability
+ 
+   5    251.053   3.51053     3.51053     86.9735     86.9735         556         0.86973
+  10    217.100   2.83147     3.17100     70.1497     78.5616         556         0.70150
+  15    184.447   2.19024     2.84447     54.2633     70.4719         555         0.54263
+  20    158.728   1.81615     2.58728     44.9951     64.0998         556         0.44995
+  25    138.883   1.59399     2.38883     39.4911     59.1834         555         0.39491
+  30    121.006   1.31685     2.21006     32.6249     54.7543         556         0.32625
+  35    105.033   1.09250     2.05033     27.0667     50.7969         556         0.27067
+  40     89.632   0.81690     1.89632     20.2387     46.9814         555         0.20239
+  45     77.503   0.80534     1.77503     19.9524     43.9764         556         0.19952
+  50     66.261   0.64961     1.66261     16.0940     41.1912         555         0.16094
+  55     56.905   0.63412     1.56905     15.7104     38.8732         556         0.15710
+  60     48.928   0.61237     1.48928     15.1716     36.8969         556         0.15172
+  65     41.461   0.51745     1.41461     12.8199     35.0469         555         0.12820
+  70     34.853   0.49017     1.34853     12.1440     33.4099         556         0.12144
+  75     27.728   0.27867     1.27728      6.9040     31.6448         555         0.06904
+  80     21.225   0.23748     1.21225      5.8835     30.0336         556         0.05883
+  85     15.332   0.21097     1.15332      5.2269     28.5734         556         0.05227
+  90      9.954   0.18419     1.09954      4.5633     27.2410         555         0.04563
+  95      5.000   0.15890     1.05000      3.9368     26.0137         556         0.03937
+ 100      0.000   0.04900     1.00000      1.2140     24.7750         555         0.01214
+ 
+ 
+Data Role=VALIDATE Target Variable=TargetBuy Target Label=Organics Purchase Indicator
+ 
+                                                                                    Mean
+                            Cumulative       %      Cumulative     Number of     Posterior
+Depth      Gain     Lift       Lift      Response   % Response   Observations   Probability
+ 
+   5    242.224   3.42224     3.42224     84.7629     84.7629         556         0.86856
+  10    212.540   2.82855     3.12540     70.0583     77.4106         556         0.70074
+  15    187.776   2.38160     2.87776     58.9881     71.2772         555         0.54415
+  20    163.312   1.89962     2.63312     47.0502     65.2177         556         0.44832
+  25    139.084   1.42044     2.39084     35.1818     59.2170         555         0.39157
+  30    122.862   1.41807     2.22862     35.1232     55.1990         556         0.32526
+  35    105.399   1.00497     2.05399     24.8914     50.8738         555         0.26166
+  40     91.424   0.93678     1.91424     23.2023     47.4125         556         0.20175
+  45     80.051   0.88957     1.80051     22.0332     44.5954         555         0.19850
+  50     67.634   0.55974     1.67634     13.8639     41.5200         556         0.15957
+  55     57.409   0.55232     1.57409     13.6799     38.9874         556         0.15710
+  60     48.862   0.54733     1.48862     13.5565     36.8704         555         0.14999
+  65     41.162   0.48838     1.41162     12.0963     34.9634         556         0.12819
+  70     34.344   0.45611     1.34344     11.2970     33.2747         555         0.12383
+  75     27.568   0.32778     1.27568      8.1185     31.5964         556         0.07261
+  80     21.334   0.27720     1.21334      6.8657     30.0523         555         0.05885
+  85     15.401   0.20557     1.15401      5.0916     28.5829         556         0.05263
+  90      9.869   0.15722     1.09869      3.8941     27.2127         555         0.04563
+  95      4.853   0.14639     1.04853      3.6257     25.9703         556         0.04112
+ 100      0.000   0.07690     1.00000      1.9048     24.7682         555         0.01214
+ 
+ 
+ 
+ 
+Assessment Score Distribution
+ 
+Data Role=TRAIN Target Variable=TargetBuy Target Label=Organics Purchase Indicator
+ 
+ Posterior     Number                     Mean
+Probability      of      Number of     Posterior
+   Range       Events    Nonevents    Probability    Percentage
+ 
+ 0.95-1.00        31           0        1.00000         0.2790
+ 0.90-0.95       188          13        0.93532         1.8089
+ 0.85-0.90        48           6        0.88889         0.4860
+ 0.80-0.85       227          56        0.80212         2.5468
+ 0.70-0.75       273          97        0.73784         3.3297
+ 0.60-0.65       249         156        0.61481         3.6447
+ 0.50-0.55        61          53        0.53509         1.0259
+ 0.45-0.50       196         223        0.46778         3.7707
+ 0.40-0.45       275         366        0.42902         5.7685
+ 0.35-0.40        82         137        0.37443         1.9708
+ 0.30-0.35       273         574        0.32231         7.6224
+ 0.25-0.30         3           8        0.27273         0.0990
+ 0.20-0.25       283        1066        0.20979        12.1400
+ 0.15-0.20       257        1357        0.15923        14.5248
+ 0.10-0.15       141         959        0.12818         9.8992
+ 0.05-0.10       100        1424        0.06562        13.7149
+ 0.00-0.05        66        1864        0.03420        17.3686
+ 
+ 
+Data Role=VALIDATE Target Variable=TargetBuy Target Label=Organics Purchase Indicator
+ 
+ Posterior     Number                     Mean
+Probability      of      Number of     Posterior
+   Range       Events    Nonevents    Probability    Percentage
+ 
+ 0.95-1.00        24           1        1.00000         0.2250
+ 0.90-0.95       181          11        0.93532         1.7280
+ 0.85-0.90        61          13        0.88889         0.6660
+ 0.80-0.85       220          64        0.80212         2.5560
+ 0.70-0.75       270          88        0.73785         3.2220
+ 0.60-0.65       258         168        0.61461         3.8340
+ 0.50-0.55        59          35        0.53509         0.8460
+ 0.45-0.50       218         187        0.46778         3.6450
+ 0.40-0.45       258         395        0.42840         5.8771
+ 0.35-0.40        63         122        0.37443         1.6650
+ 0.30-0.35       289         545        0.32353         7.5061
+ 0.25-0.30         1           9        0.27273         0.0900
+ 0.20-0.25       315        1062        0.20998        12.3931
+ 0.15-0.20       222        1383        0.15914        14.4451
+ 0.10-0.15       143        1038        0.12821        10.6291
+ 0.05-0.10       108        1386        0.06586        13.4461
+ 0.00-0.05        62        1852        0.03461        17.2262

@@ -1,0 +1,10 @@
+ 
+                                                                                                                                                                                                                                                                
+ 
+Formula Transformations
+(maximum 500 observations printed)
+
+                             Measurement
+ Variable Name      Role        Level           Formula
+
+GiftTimeLast_Rev    INPUT     INTERVAL      -1*GiftTimeLast

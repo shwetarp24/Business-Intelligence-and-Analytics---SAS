@@ -1,0 +1,57 @@
+*------------------------------------------------------------*
+* Score Log
+Date:                April 18, 2017
+Time:                15:25:47
+*------------------------------------------------------------*
+11565  *------------------------------------------------------------*;
+11566  * Ids: Computing metadata for DATA data;
+11567  *------------------------------------------------------------*;
+
+NOTE: View EMWS2.IDS_DATA.VIEW used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.03 seconds
+      
+11568  data EMWS2.Ids_EMINFO;
+11569  length TARGET KEY $32 DATA $43;
+11570  TARGET="";
+11571  KEY="IDSTABLE";
+11572  DATA="BIA.CATALOG2010";
+11573  output;
+11574  TARGET="RESPOND";
+11575  KEY="DECDATA";
+11576  DATA="EMWS2.Ids_RESPOND_DD";
+11577  output;
+11578  TARGET="RESPOND";
+11579  KEY="DECMETA";
+11580  DATA="EMWS2.Ids_RESPOND_DM";
+11581  output;
+11582  TARGET="";
+11583  KEY="STATS";
+11584  DATA="EMWS2.Ids_EMSTATDEFAULT";
+11585  output;
+11586  run;
+
+NOTE: The data set EMWS2.IDS_EMINFO has 4 observations and 3 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.15 seconds
+      cpu time            0.00 seconds
+      
+
+NOTE: View EMWS2.IDS_DATA.VIEW used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.03 seconds
+      
+11587  data EMWS2.Ids_CMeta_DATA;
+11588  set EMWS2.Ids_VariableSet;
+11589  drop DROP;
+11590  where DROP='N';
+11591  run;
+
+NOTE: There were 98 observations read from the data set EMWS2.IDS_VARIABLESET.
+      WHERE DROP='N';
+NOTE: The data set EMWS2.IDS_CMETA_DATA has 98 observations and 20 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.15 seconds
+      cpu time            0.00 seconds
+      
+

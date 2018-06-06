@@ -1,0 +1,221 @@
+*------------------------------------------------------------*
+User:                pkumari1
+Date:                May 07, 2017
+Time:                22:16:51
+*------------------------------------------------------------*
+* Training Output
+*------------------------------------------------------------*
+ 
+ 
+ 
+ 
+Variable Summary
+ 
+            Measurement    Frequency
+Role           Level         Count
+ 
+ID           INTERVAL           1
+INPUT        BINARY             3
+INPUT        INTERVAL          86
+INPUT        NOMINAL            1
+REJECTED     INTERVAL           3
+REJECTED     NOMINAL            2
+TARGET       BINARY             1
+TARGET       INTERVAL           1
+ 
+ 
+ 
+ 
+ 
+The UNIVARIATE Procedure
+Variable:  UNITSIDD  (tot units demand)
+ 
+                            Moments
+ 
+N                       48356    Sum Weights              48356
+Mean               10.9243527    Sum Observations        528258
+Std Deviation       17.154854    Variance            294.289014
+Skewness           6.05298369    Kurtosis            69.5553032
+Uncorrected SS       20001222    Corrected SS        14230345.3
+Coeff Variation    157.033139    Std Error Mean      0.07801208
+ 
+ 
+              Basic Statistical Measures
+ 
+    Location                    Variability
+ 
+Mean     10.92435     Std Deviation           17.15485
+Median    5.00000     Variance               294.28901
+Mode      2.00000     Range                  431.00000
+                      Interquartile Range     11.00000
+ 
+ 
+           Tests for Location: Mu0=0
+ 
+Test           -Statistic-    -----p Value------
+ 
+Student's t    t  140.0341    Pr > |t|    <.0001
+Sign           M     24178    Pr >= |M|   <.0001
+Signed Rank    S  5.8459E8    Pr >= |S|   <.0001
+ 
+ 
+Quantiles (Definition 5)
+ 
+Level         Quantile
+ 
+100% Max           432
+99%                 80
+95%                 38
+90%                 25
+75% Q3              13
+50% Median           5
+25% Q1               2
+10%                  1
+5%                   1
+1%                   1
+0% Min               1
+ 
+ 
+        Extreme Observations
+ 
+----Lowest----        ----Highest---
+ 
+Value      Obs        Value      Obs
+ 
+    1    48352          325     8871
+    1    48350          326    19052
+    1    48314          423     4484
+    1    48310          429     8065
+    1    48309          432    31650
+ 
+ 
+                          Histogram                          #  Boxplot                        Normal Probability Plot
+    430+*                                                    3     *         430+                                                  *
+       .                                                                        |
+       .                                                                        |
+       .                                                                        |
+       .                                                                        |
+       .*                                                    3     *            |                                                  *
+       .*                                                    2     *            |                                                  *
+    290+*                                                    3     *         290+                                                  *
+       .*                                                    3     *            |                                                  *
+       .*                                                    5     *            |                                                  *
+       .*                                                   11     *            |                                                  *
+       .*                                                    9     *            |                                                  *
+       .*                                                   16     *            |                                                  *
+       .*                                                   25     *            |                                                  *
+    150+*                                                   30     *         150+                                                  *
+       .*                                                   58     *            |                                                  *
+       .*                                                  107     *            |                                                  *
+       .*                                                  220     *            |                                                ***
+       .*                                                  505     *            |                                             ****
+       .**                                                1269     0            |                                          ****+++++
+       .******                                            4804     0            |                               +++++*******
+     10+************************************************ 41283  +--+--+       10+*************************************
+        ----+----+----+----+----+----+----+----+----+---                         +----+----+----+----+----+----+----+----+----+----+
+        * may represent up to 861 counts                                             -2        -1         0        +1        +2
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+The UNIVARIATE Procedure
+Variable:  BUYPROP  (% quarters w/buy)
+ 
+                            Moments
+ 
+N                       48356    Sum Weights              48356
+Mean               0.18857954    Sum Observations    9118.95201
+Std Deviation      0.25695638    Variance            0.06602658
+Skewness           1.86441986    Kurtosis            3.10645445
+Uncorrected SS     4912.36313    Corrected SS         3192.7154
+Coeff Variation    136.258891    Std Error Mean      0.00116851
+ 
+ 
+              Basic Statistical Measures
+ 
+    Location                    Variability
+ 
+Mean     0.188580     Std Deviation            0.25696
+Median   0.100000     Variance                 0.06603
+Mode     0.000000     Range                    1.00000
+                      Interquartile Range      0.25000
+ 
+ 
+           Tests for Location: Mu0=0
+ 
+Test           -Statistic-    -----p Value------
+ 
+Student's t    t  161.3839    Pr > |t|    <.0001
+Sign           M   14483.5    Pr >= |M|   <.0001
+Signed Rank    S  2.0978E8    Pr >= |S|   <.0001
+ 
+ 
+Quantiles (Definition 5)
+ 
+Level         Quantile
+ 
+100% Max          1.00
+99%               1.00
+95%               1.00
+90%               0.50
+75% Q3            0.25
+50% Median        0.10
+25% Q1            0.00
+10%               0.00
+5%                0.00
+1%                0.00
+0% Min            0.00
+ 
+ 
+        Extreme Observations
+ 
+----Lowest----        ----Highest---
+ 
+Value      Obs        Value      Obs
+ 
+    0    48354            1    48312
+    0    48351            1    48313
+    0    48350            1    48337
+    0    48346            1    48343
+    0    48345            1    48356
+ 
+ 
+                          Histogram                          #  Boxplot                        Normal Probability Plot
+  1.025+*******                                           2708     0       1.025+                                         **********
+       .                                                                        |
+  0.925+*                                                    2     0       0.925+                                         *
+       .*                                                   16     0            |                                         *
+  0.825+*                                                   58     0       0.825+                                         *       ++
+       .*                                                   92     0            |                                         *     ++
+  0.725+*                                                   38     0       0.725+                                         *   ++
+       .**                                                 431     0            |                                        ** ++
+  0.625+*                                                  214     0       0.625+                                       ** +
+       .*                                                  121     |            |                                       *++
+  0.525+*******                                           2838     |       0.525+                                    ****
+       .*                                                   77     |            |                                    *+
+  0.425+***                                                900     |       0.425+                                  +**
+       .**                                                 409     |            |                                ++ *
+  0.325+********                                          2903     |       0.325+                              ++ ***
+       .********                                          3094  +-----+         |                            ++ ***
+  0.225+********                                          3158  |     |    0.225+                          ++ ***
+       .*******                                           2809  |  +  |         |                        ++ ***
+  0.125+************                                      4696  *-----*    0.125+                      ++ ***
+       .***********                                       4294  |     |         |                    ++ ***
+  0.025+************************************************ 19498  +-----+    0.025+************************
+        ----+----+----+----+----+----+----+----+----+---                         +----+----+----+----+----+----+----+----+----+----+
+        * may represent up to 407 counts                                             -2        -1         0        +1        +2
+ 
+ 
+
+
+*------------------------------------------------------------*
+* Score Output
+*------------------------------------------------------------*
+
+
+*------------------------------------------------------------*
+* Report Output
+*------------------------------------------------------------*

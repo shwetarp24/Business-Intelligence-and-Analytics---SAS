@@ -1,0 +1,1188 @@
+ 
+                                                                                                                                                                                                                                                                
+ 
+ 
+Variable Summary
+
+            Measurement    Frequency
+Role           Level         Count
+
+ID           INTERVAL           1   
+INPUT        BINARY             3   
+INPUT        INTERVAL          86   
+INPUT        NOMINAL            1   
+REJECTED     INTERVAL           3   
+REJECTED     NOMINAL            2   
+TARGET       BINARY             1   
+TARGET       INTERVAL           1   
+ 
+                                                                                                                                                                                                                                                                
+ 
+Variable Levels Summary
+(maximum 500 observations printed)
+
+                      Frequency
+Variable    Role        Count
+
+CUST_ID     ID          48356  
+RESPOND     TARGET          2  
+ 
+                                                                                                                                                                                                                                                                
+ 
+Class Variable Summary Statistics
+(maximum 500 observations printed)
+
+Data Role=TRAIN
+
+                               Number
+Data     Variable                of                            Mode                  Mode2
+Role       Name       Role     Levels    Missing    Mode    Percentage    Mode2    Percentage
+
+TRAIN    BOTHPAYM    INPUT        2         0        0        80.66        1         19.34   
+TRAIN    CCPAYM      INPUT        2         0        0        58.43        1         41.57   
+TRAIN    METHPAYM    INPUT        4         0        CC       41.57        CK        30.49   
+TRAIN    PCPAYM      INPUT        2         0        0        69.51        1         30.49   
+TRAIN    RESPOND     TARGET       2         0        0        94.34        1          5.66   
+ 
+                                                                                                                                                                                                                                                                
+ 
+Distribution of Class Target and Segment Variables
+(maximum 500 observations printed)
+
+Data Role=TRAIN
+
+Data     Variable                        Frequency
+Role       Name       Role     Level         Count    Percent
+
+TRAIN    RESPOND     TARGET      0           45617    94.3358
+TRAIN    RESPOND     TARGET      1            2739     5.6642
+ 
+                                                                                                                                                                                                                                                                
+ 
+Interval Variable Summary Statistics
+(maximum 500 observations printed)
+
+Data Role=TRAIN
+
+                                    Standard          Non
+Variable       Role         Mean    Deviation     Missing     Missing     Minimum      Median     Maximum    Skewness    Kurtosis
+
+ACTBUY        INPUT     0.984159    1.161242        48356           0           0           1          10    1.899436    5.527354
+BUYPROP       INPUT      0.18858    0.256956        48356           0           0         0.1           1     1.86442    3.106454
+CATALOGCNT    INPUT      3.76582    3.133252        48356           0           1           3          27    1.594352     2.92797
+DAYLAST       INPUT     1179.722    1228.086        48356           0           0         752        8265    1.770741    3.311158
+DEPT01        INPUT     0.494789    1.793298        48356           0           0           0          59    7.434065    106.8617
+DEPT02        INPUT     0.292249    1.151603        48356           0           0           0          24    5.505485    45.43137
+DEPT03        INPUT     1.085718    2.827892        48356           0           0           0          60     4.95107    40.83597
+DEPT04        INPUT     0.688436    2.326605        48356           0           0           0          47    6.132325     59.2593
+DEPT05        INPUT     0.540595    1.517439        48356           0           0           0          28     3.83673    22.98721
+DEPT06        INPUT      0.84914    1.958575        48356           0           0           0          32    3.381463    19.39733
+DEPT07        INPUT     0.025664    0.313127        48356           0           0           0          11    14.09688    241.7251
+DEPT08        INPUT     0.319898    1.316979        48356           0           0           0          35    6.375009    64.80886
+DEPT09        INPUT     0.251696    1.224872        48356           0           0           0          34    7.740294    95.81647
+DEPT10        INPUT      0.39689    1.754188        48356           0           0           0         112    11.88101    411.7731
+DEPT11        INPUT     0.151667    0.755796        48356           0           0           0          29    6.816584    89.67079
+DEPT12        INPUT     0.214038    0.898219        48356           0           0           0          16    5.096993     34.9081
+DEPT13        INPUT     1.304616    2.569393        48356           0           0           0          94     4.15173    56.69595
+DEPT14        INPUT     0.835967    2.172124        48356           0           0           0          61    4.836208    46.48455
+DEPT15        INPUT     0.282819    1.204034        48356           0           0           0          53    7.737428    137.2973
+DEPT16        INPUT     0.226921    1.029329        48356           0           0           0          25    6.304397    61.63563
+DEPT17        INPUT     0.194123    0.950983        48356           0           0           0          34    7.418783    97.10272
+DEPT18        INPUT     0.132434     0.70056        48356           0           0           0          13    6.131811    46.69857
+DEPT19        INPUT     0.075296    0.598431        48356           0           0           0          20    10.66043    160.2932
+DEPT20        INPUT     0.030275    0.311755        48356           0           0           0           8    10.74462    123.2588
+DEPT21        INPUT     0.018736    0.249206        48356           0           0           0           9    14.27809    228.5627
+DEPT22        INPUT     2.125238    3.597468        48356           0           0           0         117    4.074707    46.21015
+DEPT23        INPUT     2.137046    3.816998        48356           0           0           0          89    3.938389    31.80009
+DEPT24        INPUT     0.632807    1.719595        48356           0           0           0          50    4.995056    57.01079
+DEPT25        INPUT     1.764228    4.789134        48356           0           0           0         186    8.725793     152.916
+DEPT26        INPUT     0.188539    0.891858        48356           0           0           0          55    10.19116    350.3848
+DEPT27        INPUT     0.586173    1.548859        48356           0           0           0          33    3.672149    23.44171
+DOLINDEA      INPUT     47.74947    37.75177        48356           0           1       37.78      768.85     3.75269    31.59222
+DOLINDET      INPUT     196.6703     314.091        48356           0           1       97.85     7978.98    6.095636    67.24921
+DOLL24        INPUT     45.69096    94.26046        48356           0           0           0      2433.5    5.890952    67.84144
+DOLLARQ01     INPUT     3.628769    19.70056        48356           0           0           0      760.95     10.7672    195.0808
+DOLLARQ02     INPUT     3.708681    20.59839        48356           0           0           0      836.45    10.49433    179.6861
+DOLLARQ03     INPUT     2.813645     16.6445        48356           0           0           0      854.85    11.84058     272.597
+DOLLARQ04     INPUT     4.685479    22.20171        48356           0           0           0       777.4     8.81361    131.5494
+DOLLARQ05     INPUT     4.348623    21.36355        48356           0           0           0      695.35    9.108768    135.1772
+DOLLARQ06     INPUT     3.780876    19.61969        48356           0           0           0      1043.8    11.25904    275.4938
+DOLLARQ07     INPUT      4.19732    22.14042        48356           0           0           0      1125.2    12.81589     327.863
+DOLLARQ08     INPUT     6.165348    27.59771        48356           0           0           0     1214.15    10.50193    221.3441
+DOLLARQ09     INPUT     4.236117    20.60429        48356           0           0           0       724.6    9.327963    143.0409
+DOLLARQ10     INPUT     3.649963    19.40428        48356           0           0           0      555.25    9.251186    124.3032
+DOLLARQ11     INPUT     4.002763     20.3574        48356           0           0           0       649.7    10.02275    160.0096
+DOLLARQ12     INPUT     6.404808     27.4868        48356           0           0           0        1109    9.658056     177.371
+DOLLARQ13     INPUT     5.427048    25.91223        48356           0           0           0     1407.01    14.02419    443.7675
+DOLLARQ14     INPUT     4.420128    22.82223        48356           0           0           0        1487    15.62889    584.6354
+DOLLARQ15     INPUT     4.918279    23.72771        48356           0           0           0       858.5    10.28301     183.382
+DOLLARQ16     INPUT     7.672898    30.10401        48356           0           0           0      713.45    7.703857    93.10502
+DOLLARQ17     INPUT     5.586222     25.6532        48356           0           0           0     1319.35     11.0741    264.7515
+DOLLARQ18     INPUT     4.971588    23.44341        48356           0           0           0       752.1     8.86678    127.5209
+DOLLARQ19     INPUT     4.451036    22.49695        48356           0           0           0      677.88    9.464529     137.274
+DOLLARQ20     INPUT      8.69922    32.16682        48356           0           0           0       908.5    7.543856    95.52023
+DOLLARQ21     INPUT     4.743096    23.94625        48356           0           0           0      1084.3    11.99587    283.7185
+DOLLARQ22     INPUT     4.914029     24.5188        48356           0           0           0     1128.75     10.4759    207.4614
+DOLNETDA      INPUT      45.3011     36.4094        48356           0           0        35.9       768.5    3.659262      30.395
+DOLNETDT      INPUT     187.8592    302.3536        48356           0           0       92.95     8028.98    6.149697    69.60593
+FREQPRCH      INPUT     4.166991    5.290656        48356           0           1           2         150    4.590923    42.57681
+MONLAST       INPUT     38.67834    40.34461        48356           0           0          25         271     1.77074    3.309627
+TENURE        INPUT     83.25699    60.10494        48356           0           0          70         276      0.6187    -0.42776
+TOTORDQ01     INPUT     0.077777    0.313897        48356           0           0           0           7    5.218707    40.65253
+TOTORDQ02     INPUT     0.073435    0.302344        48356           0           0           0           8    5.160261    39.30277
+TOTORDQ03     INPUT     0.058793    0.260042        48356           0           0           0           7    5.243599    39.13779
+TOTORDQ04     INPUT     0.090495    0.337992        48356           0           0           0          16    6.843372    143.6122
+TOTORDQ05     INPUT     0.088407    0.326826        48356           0           0           0           5    4.349332     23.6723
+TOTORDQ06     INPUT     0.079142     0.30608        48356           0           0           0           9    4.870796    39.62242
+TOTORDQ07     INPUT     0.085077    0.319432        48356           0           0           0           8    4.826688    38.65863
+TOTORDQ08     INPUT     0.117193    0.430817        48356           0           0           0          42    24.77151    2027.439
+TOTORDQ09     INPUT     0.090041    0.323931        48356           0           0           0           5     4.19222    22.49128
+TOTORDQ10     INPUT     0.073889    0.295941        48356           0           0           0           6    4.748208    29.63758
+TOTORDQ11     INPUT      0.08365     0.31311        48356           0           0           0           7    4.532181    29.76623
+TOTORDQ12     INPUT       0.1259    0.403211        48356           0           0           0          21    6.706015    174.8138
+TOTORDQ13     INPUT     0.109604    0.355616        48356           0           0           0           6    3.759706    18.18345
+TOTORDQ14     INPUT     0.089399    0.320935        48356           0           0           0           6    4.200985    23.76373
+TOTORDQ15     INPUT     0.098623    0.348258        48356           0           0           0          14     5.31424    76.35668
+TOTORDQ16     INPUT     0.146538    0.429586        48356           0           0           0          11     4.27591    37.83939
+TOTORDQ17     INPUT     0.110369    0.361466        48356           0           0           0           5    3.817627    18.09198
+TOTORDQ18     INPUT     0.094962    0.332624        48356           0           0           0           5     4.05434     20.6283
+TOTORDQ19     INPUT     0.083133    0.307215        48356           0           0           0           5    4.222505    22.38698
+TOTORDQ20     INPUT     0.159815    0.460877        48356           0           0           0          27    9.418567     362.597
+TOTORDQ21     INPUT     0.091798    0.327788        48356           0           0           0           9      4.4856    33.56975
+TOTORDQ22     INPUT     0.088055    0.315034        48356           0           0           0           6    4.150825    22.88131
+UNITSIDD      INPUT     10.92435    17.15485        48356           0           1           5         432    6.052984     69.5553
+UNITSLAP      INPUT     22.04998    20.43467        48356           0           1      16.875       768.5    6.986767    113.7625
+UNTLANPO      INPUT     2.668783    2.317183        48356           0           1           2         121    7.880936    217.4007
+ORDERSIZE     TARGET    3.555451    20.34696        48356           0           0           0      510.72    9.691806     131.486
+ 
+                                                                                                                                                                                                                                                                
+ 
+Class Variable Summary Statistics by Class Target
+(maximum 500 observations printed)
+
+Data Role=TRAIN Variable Name=BOTHPAYM
+
+                       Number
+             Target      of                            Mode                  Mode2
+ Target      Level     Levels    Missing    Mode    Percentage    Mode2    Percentage
+
+RESPOND        0          2         0        0        81.11         1        18.89   
+RESPOND        1          2         0        0        73.13         1        26.87   
+_OVERALL_                 2         0        0        80.66         1        19.34   
+
+
+Data Role=TRAIN Variable Name=CCPAYM
+
+                       Number
+             Target      of                            Mode                  Mode2
+ Target      Level     Levels    Missing    Mode    Percentage    Mode2    Percentage
+
+RESPOND        0          2         0        0        58.30         1        41.70   
+RESPOND        1          2         0        0        60.72         1        39.28   
+_OVERALL_                 2         0        0        58.43         1        41.57   
+
+
+Data Role=TRAIN Variable Name=METHPAYM
+
+                       Number
+             Target      of                            Mode                  Mode2
+ Target      Level     Levels    Missing    Mode    Percentage    Mode2    Percentage
+
+RESPOND        0          4         0        CC       41.70        CK        30.53   
+RESPOND        1          4         0        CC       39.28        CK        29.86   
+_OVERALL_                 4         0        CC       41.57        CK        30.49   
+
+
+Data Role=TRAIN Variable Name=PCPAYM
+
+                       Number
+             Target      of                            Mode                  Mode2
+ Target      Level     Levels    Missing    Mode    Percentage    Mode2    Percentage
+
+RESPOND        0          2         0        0        69.47         1        30.53   
+RESPOND        1          2         0        0        70.14         1        29.86   
+_OVERALL_                 2         0        0        69.51         1        30.49   
+ 
+                                                                                                                                                                                                                                                                
+ 
+Interval Variable Summary Statistics by Class Target
+(maximum 500 observations printed)
+
+Data Role=TRAIN Variable=ACTBUY
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              1           0       45617           0          10    0.951597      1.1202     1.864435    5.428057    INPUT    num qrtrs w/buy
+RESPOND        1              1           0        2739           0          10     1.52647    1.611549     1.559801    2.862447    INPUT    num qrtrs w/buy
+_OVERALL_                     1           0       48356           0          10    0.984159    1.161242     1.899436    5.527354    INPUT    num qrtrs w/buy
+
+
+Data Role=TRAIN Variable=BUYPROP
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0            0.1           0       45617           0           1     0.18395    0.253858      1.91111    3.335853    INPUT    % quarters w/buy
+RESPOND        1       0.181818           0        2739           0           1    0.265676    0.293457     1.278582    0.808952    INPUT    % quarters w/buy
+_OVERALL_                   0.1           0       48356           0           1     0.18858    0.256956      1.86442    3.106454    INPUT    % quarters w/buy
+
+
+Data Role=TRAIN Variable=CATALOGCNT
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role                Label
+
+RESPOND        0              3           0       45617           1          24    3.678453    3.052072     1.591797    2.871254    INPUT    number of catalogs received
+RESPOND        1              4           0        2739           1          27    5.220884     3.99266     1.260401    1.670104    INPUT    number of catalogs received
+_OVERALL_                     3           0       48356           1          27     3.76582    3.133252     1.594352     2.92797    INPUT    number of catalogs received
+
+
+Data Role=TRAIN Variable=DAYLAST
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0            782           0       45617           0        8265    1204.939    1236.789     1.741862    3.179485    INPUT    days since last
+RESPOND        1            362           0        2739           0        7859    759.7401    981.9968     2.517462     7.72806    INPUT    days since last
+_OVERALL_                   752           0       48356           0        8265    1179.722    1228.086     1.770741    3.311158    INPUT    days since last
+
+
+Data Role=TRAIN Variable=DEPT01
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role         Label
+
+RESPOND        0              0           0       45617           0          59    0.469386    1.686947     7.020023    99.98167    INPUT    womens apparel
+RESPOND        1              0           0        2739           0          49    0.917853    3.032121     6.733124    66.95573    INPUT    womens apparel
+_OVERALL_                     0           0       48356           0          59    0.494789    1.793298     7.434065    106.8617    INPUT    womens apparel
+
+
+Data Role=TRAIN Variable=DEPT02
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0          24    0.275928    1.101996     5.496759    45.96787    INPUT    womens sleepwear
+RESPOND        1              0           0        2739           0          19    0.564074     1.76376      4.44541    26.12388    INPUT    womens sleepwear
+_OVERALL_                     0           0       48356           0          24    0.292249    1.151603     5.505485    45.43137    INPUT    womens sleepwear
+
+
+Data Role=TRAIN Variable=DEPT03
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0          60    1.025692    2.662534     4.713144    36.82357    INPUT    womens underwear
+RESPOND        1              0           0        2739           0          54    2.085433    4.697419     4.338569    27.02345    INPUT    womens underwear
+_OVERALL_                     0           0       48356           0          60    1.085718    2.827892      4.95107    40.83597    INPUT    womens underwear
+
+
+Data Role=TRAIN Variable=DEPT04
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role         Label
+
+RESPOND        0              0           0       45617           0          45    0.645921    2.200775     6.159116    60.94539    INPUT    womens hosiery
+RESPOND        1              0           0        2739           0          47    1.396495    3.791373     4.582803    29.30299    INPUT    womens hosiery
+_OVERALL_                     0           0       48356           0          47    0.688436    2.326605     6.132325     59.2593    INPUT    womens hosiery
+
+
+Data Role=TRAIN Variable=DEPT05
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0          28    0.520552    1.479894     3.882806     24.0129    INPUT    womens footwear
+RESPOND        1              0           0        2739           0          19    0.874407    2.014991     3.080609    12.50648    INPUT    womens footwear
+_OVERALL_                     0           0       48356           0          28    0.540595    1.517439      3.83673    22.98721    INPUT    womens footwear
+
+
+Data Role=TRAIN Variable=DEPT06
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role        Label
+
+RESPOND        0              0           0       45617           0          32    0.825591    1.917107     3.328319    18.49972    INPUT    womens misc
+RESPOND        1              0           0        2739           0          29    1.241329    2.520296     3.423343    20.02003    INPUT    womens misc
+_OVERALL_                     0           0       48356           0          32     0.84914    1.958575     3.381463    19.39733    INPUT    womens misc
+
+
+Data Role=TRAIN Variable=DEPT07
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role        Label
+
+RESPOND        0              0           0       45617           0          11    0.024202    0.299409      13.9543    230.5243    INPUT    mens apparel
+RESPOND        1              0           0        2739           0          11    0.050018    0.487292     12.04465    177.9886    INPUT    mens apparel
+_OVERALL_                     0           0       48356           0          11    0.025664    0.313127     14.09688    241.7251    INPUT    mens apparel
+
+
+Data Role=TRAIN Variable=DEPT08
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role         Label
+
+RESPOND        0              0           0       45617           0          30    0.303286    1.250737     5.979575    53.01219    INPUT    mens sleepwear
+RESPOND        1              0           0        2739           0          35    0.596568    2.118409     6.295499    59.86826    INPUT    mens sleepwear
+_OVERALL_                     0           0       48356           0          35    0.319898    1.316979     6.375009    64.80886    INPUT    mens sleepwear
+
+
+Data Role=TRAIN Variable=DEPT09
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role         Label
+
+RESPOND        0              0           0       45617           0          34    0.241401    1.182208     7.676155    94.92285    INPUT    mens underwear
+RESPOND        1              0           0        2739           0          31    0.423147    1.783433     6.877303    68.60811    INPUT    mens underwear
+_OVERALL_                     0           0       48356           0          34    0.251696    1.224872     7.740294    95.81647    INPUT    mens underwear
+
+
+Data Role=TRAIN Variable=DEPT10
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role        Label
+
+RESPOND        0              0           0       45617           0         112    0.374751    1.686746     12.76631    492.1643    INPUT    mens hosiery
+RESPOND        1              0           0        2739           0          36    0.765608    2.607759     6.066806    51.40942    INPUT    mens hosiery
+_OVERALL_                     0           0       48356           0         112     0.39689    1.754188     11.88101    411.7731    INPUT    mens hosiery
+
+
+Data Role=TRAIN Variable=DEPT11
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role         Label
+
+RESPOND        0              0           0       45617           0          29    0.143938     0.73649      7.11881    100.4257    INPUT    mens footware
+RESPOND        1              0           0        2739           0          11    0.280394     1.01678      4.19134    21.52432    INPUT    mens footware
+_OVERALL_                     0           0       48356           0          29    0.151667    0.755796     6.816584    89.67079    INPUT    mens footware
+
+
+Data Role=TRAIN Variable=DEPT12
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0          15    0.204989     0.87291     5.075869    33.83484    INPUT    mens misc
+RESPOND        1              0           0        2739           0          16    0.364732    1.236857     4.566954    29.57886    INPUT    mens misc
+_OVERALL_                     0           0       48356           0          16    0.214038    0.898219     5.096993     34.9081    INPUT    mens misc
+
+
+Data Role=TRAIN Variable=DEPT13
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role      Label
+
+RESPOND        0              0           0       45617           0          36    1.257229    2.450088     3.047089    15.99038    INPUT    kitchen
+RESPOND        1              0           0        2739           0          94     2.09383    3.990076     7.453033    127.9915    INPUT    kitchen
+_OVERALL_                     0           0       48356           0          94    1.304616    2.569393      4.15173    56.69595    INPUT    kitchen
+
+
+Data Role=TRAIN Variable=DEPT14
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role      Label
+
+RESPOND        0              0           0       45617           0          39    0.799636    2.059301     4.267994    31.00192    INPUT    bedding
+RESPOND        1              0           0        2739           0          61    1.441037    3.505043     5.566589    55.08899    INPUT    bedding
+_OVERALL_                     0           0       48356           0          61    0.835967    2.172124     4.836208    46.48455    INPUT    bedding
+
+
+Data Role=TRAIN Variable=DEPT15
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role     Label
+
+RESPOND        0              0           0       45617           0          53    0.272968    1.178022     8.008883    151.4477    INPUT    bath 
+RESPOND        1              0           0        2739           0          21    0.446878    1.566521     5.169503    38.11068    INPUT    bath 
+_OVERALL_                     0           0       48356           0          53    0.282819    1.204034     7.737428    137.2973    INPUT    bath 
+
+
+Data Role=TRAIN Variable=DEPT16
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role     Label
+
+RESPOND        0              0           0       45617           0          25    0.217507    0.993864     6.083045    54.31864    INPUT    floor
+RESPOND        1              0           0        2739           0          24    0.383717    1.493071     6.418183    65.50131    INPUT    floor
+_OVERALL_                     0           0       48356           0          25    0.226921    1.029329     6.304397    61.63563    INPUT    floor
+
+
+Data Role=TRAIN Variable=DEPT17
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role     Label
+
+RESPOND        0              0           0       45617           0          34    0.184668     0.91185     7.410603    100.7314    INPUT    table
+RESPOND        1              0           0        2739           0          23    0.351588    1.446693     6.106597    52.52649    INPUT    table
+_OVERALL_                     0           0       48356           0          34    0.194123    0.950983     7.418783    97.10272    INPUT    table
+
+
+Data Role=TRAIN Variable=DEPT18
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role     Label
+
+RESPOND        0              0           0       45617           0          13    0.128636    0.686965      6.12394      46.086    INPUT    chair
+RESPOND        1              0           0        2739           0          11    0.195692     0.89498      5.71541    41.87276    INPUT    chair
+_OVERALL_                     0           0       48356           0          13    0.132434     0.70056     6.131811    46.69857    INPUT    chair
+
+
+Data Role=TRAIN Variable=DEPT19
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role     Label
+
+RESPOND        0              0           0       45617           0          18    0.072166    0.579077      10.4359    148.0772    INPUT    window
+RESPOND        1              0           0        2739           0          20    0.127419    0.857343     10.35979    156.2793    INPUT    window
+_OVERALL_                     0           0       48356           0          20    0.075296    0.598431     10.66043    160.2932    INPUT    window
+
+
+Data Role=TRAIN Variable=DEPT20
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0           8    0.029046      0.3059     11.01794    130.1332    INPUT    furniture
+RESPOND        1              0           0        2739           0           5    0.050748    0.396269     7.901237    63.10209    INPUT    furniture
+_OVERALL_                     0           0       48356           0           8    0.030275    0.311755     10.74462    123.2588    INPUT    furniture
+
+
+Data Role=TRAIN Variable=DEPT21
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role     Label
+
+RESPOND        0              0           0       45617           0           9    0.018327    0.246008     14.43625    234.9809    INPUT    light
+RESPOND        1              0           0        2739           0           5    0.025557    0.297427     12.21579     156.828    INPUT    light
+_OVERALL_                     0           0       48356           0           9    0.018736    0.249206     14.27809    228.5627    INPUT    light
+
+
+Data Role=TRAIN Variable=DEPT22
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0          59    2.049762    3.403828     3.168749    18.94996    INPUT    household
+RESPOND        1              3           0        2739           0         117    3.382256    5.818749     6.006195    76.39127    INPUT    household
+_OVERALL_                     0           0       48356           0         117    2.125238    3.597468     4.074707    46.21015    INPUT    household
+
+
+Data Role=TRAIN Variable=DEPT23
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role     Label
+
+RESPOND        0              0           0       45617           0          89    2.066379    3.675282     3.880059    32.20761    INPUT    beauty
+RESPOND        1              0           0        2739           0          62    3.313983    5.549366     3.491262     19.4729    INPUT    beauty
+_OVERALL_                     0           0       48356           0          89    2.137046    3.816998     3.938389    31.80009    INPUT    beauty
+
+
+Data Role=TRAIN Variable=DEPT24
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role     Label
+
+RESPOND        0              0           0       45617           0          50    0.607471    1.656774     4.897815    58.34111    INPUT    health
+RESPOND        1              0           0        2739           0          31    1.054765     2.51059     4.610128    34.19484    INPUT    health
+_OVERALL_                     0           0       48356           0          50    0.632807    1.719595     4.995056    57.01079    INPUT    health
+
+
+Data Role=TRAIN Variable=DEPT25
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role     Label
+
+RESPOND        0              0           0       45617           0         186    1.634829    4.356396     8.898405    177.3228    INPUT    food 
+RESPOND        1              0           0        2739           0         126    3.919314    9.162664     5.516103    44.46609    INPUT    food 
+_OVERALL_                     0           0       48356           0         186    1.764228    4.789134     8.725793     152.916    INPUT    food 
+
+
+Data Role=TRAIN Variable=DEPT26
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role     Label
+
+RESPOND        0              0           0       45617           0          25    0.181007    0.836859     6.032166    63.20169    INPUT    gift 
+RESPOND        1              0           0        2739           0          55    0.313983    1.537215     18.77459    602.6549    INPUT    gift 
+_OVERALL_                     0           0       48356           0          55    0.188539    0.891858     10.19116    350.3848    INPUT    gift 
+
+
+Data Role=TRAIN Variable=DEPT27
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role      Label
+
+RESPOND        0              0           0       45617           0          27    0.570533    1.514727     3.510848    19.62895    INPUT    outdoor
+RESPOND        1              0           0        2739           0          33    0.846659    2.017418      4.42211    37.89241    INPUT    outdoor
+_OVERALL_                     0           0       48356           0          33    0.586173    1.548859     3.672149    23.44171    INPUT    outdoor
+
+
+Data Role=TRAIN Variable=DOLINDEA
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role        Label
+
+RESPOND        0           37.6           0       45617           1      768.85    47.68212    37.94991     3.781433    31.93877    INPUT    avg $ demand
+RESPOND        1         39.925           0        2739        3.95       536.6    48.87119    34.27087     3.069627    21.63535    INPUT    avg $ demand
+_OVERALL_                 37.78           0       48356           1      768.85    47.74947    37.75177      3.75269    31.59222    INPUT    avg $ demand
+
+
+Data Role=TRAIN Variable=DOLINDET
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role         Label
+
+RESPOND        0           95.1           0       45617           1      7421.6    187.6668    290.5862     5.827116    62.65572    INPUT    total $ demand
+RESPOND        1         170.65           0        2739        3.95     7978.98    346.6201    558.2436       4.8783    36.30019    INPUT    total $ demand
+_OVERALL_                 97.85           0       48356           1     7978.98    196.6703     314.091     6.095636    67.24921    INPUT    total $ demand
+
+
+Data Role=TRAIN Variable=DOLL24
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0      2140.1    42.60035     86.8664      5.45256    57.27983    INPUT    $ last 24 months
+RESPOND        1           43.9           0        2739           0      2433.5    97.16399     168.497     5.069334    42.82712    INPUT    $ last 24 months
+_OVERALL_                     0           0       48356           0      2433.5    45.69096    94.26046     5.890952    67.84144    INPUT    $ last 24 months
+
+
+Data Role=TRAIN Variable=DOLLARQ01
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0      760.95    3.492373    19.35092     11.22434    213.7604    INPUT    tot $ 93Q1
+RESPOND        1              0           0        2739           0       322.3    5.900391    24.70347     6.458229    51.91695    INPUT    tot $ 93Q1
+_OVERALL_                     0           0       48356           0      760.95    3.628769    19.70056      10.7672    195.0808    INPUT    tot $ 93Q1
+
+
+Data Role=TRAIN Variable=DOLLARQ02
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0       600.1     3.53704    19.73177      9.86391    141.8168    INPUT    tot $ 93Q2
+RESPOND        1              0           0        2739           0      836.45    6.567302    31.59233     11.17319    210.1396    INPUT    tot $ 93Q2
+_OVERALL_                     0           0       48356           0      836.45    3.708681    20.59839     10.49433    179.6861    INPUT    tot $ 93Q2
+
+
+Data Role=TRAIN Variable=DOLLARQ03
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0      854.85    2.723052    16.30134     12.21084    297.3436    INPUT    tot $ 93Q3
+RESPOND        1              0           0        2739           0      379.35    4.322435    21.51935     8.245602    90.64984    INPUT    tot $ 93Q3
+_OVERALL_                     0           0       48356           0      854.85    2.813645     16.6445     11.84058     272.597    INPUT    tot $ 93Q3
+
+
+Data Role=TRAIN Variable=DOLLARQ04
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0       777.4    4.551376    21.91408     9.079233    140.9146    INPUT    tot $ 93Q4
+RESPOND        1              0           0        2739           0      354.25    6.918919    26.44252     5.958581    46.70731    INPUT    tot $ 93Q4
+_OVERALL_                     0           0       48356           0       777.4    4.685479    22.20171      8.81361    131.5494    INPUT    tot $ 93Q4
+
+
+Data Role=TRAIN Variable=DOLLARQ05
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0      695.35    4.177163     20.8713     9.368599    145.3025    INPUT    tot $ 94Q1
+RESPOND        1              0           0        2739           0         402    7.204228    28.18315     6.541768    58.52823    INPUT    tot $ 94Q1
+_OVERALL_                     0           0       48356           0      695.35    4.348623    21.36355     9.108768    135.1772    INPUT    tot $ 94Q1
+
+
+Data Role=TRAIN Variable=DOLLARQ06
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0      1043.8    3.639746     19.1868     11.80521    308.2703    INPUT    tot $ 94Q2
+RESPOND        1              0           0        2739           0      352.75    6.131347    25.67266       6.5319    56.28214    INPUT    tot $ 94Q2
+_OVERALL_                     0           0       48356           0      1043.8    3.780876    19.61969     11.25904    275.4938    INPUT    tot $ 94Q2
+
+
+Data Role=TRAIN Variable=DOLLARQ07
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0      1125.2    4.012869    21.24741     12.80099     343.027    INPUT    tot $ 94Q3
+RESPOND        1              0           0        2739           0       773.6    7.269281    33.55428     10.71541    175.3685    INPUT    tot $ 94Q3
+_OVERALL_                     0           0       48356           0      1125.2     4.19732    22.14042     12.81589     327.863    INPUT    tot $ 94Q3
+
+
+Data Role=TRAIN Variable=DOLLARQ08
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0     1214.15    5.857696    26.96768     11.13404    249.7778    INPUT    tot $ 94Q4
+RESPOND        1              0           0        2739           0       461.2    11.28917    36.14994     5.325639    38.11541    INPUT    tot $ 94Q4
+_OVERALL_                     0           0       48356           0     1214.15    6.165348    27.59771     10.50193    221.3441    INPUT    tot $ 94Q4
+
+
+Data Role=TRAIN Variable=DOLLARQ09
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0       724.6    4.113945    20.43539     9.643025     152.666    INPUT    tot $ 95Q1
+RESPOND        1              0           0        2739           0      324.65    6.270858    23.14691     5.588522    41.20199    INPUT    tot $ 95Q1
+_OVERALL_                     0           0       48356           0       724.6    4.236117    20.60429     9.327963    143.0409    INPUT    tot $ 95Q1
+
+
+Data Role=TRAIN Variable=DOLLARQ10
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0      555.25    3.453236    18.67769     9.456667    131.4572    INPUT    tot $ 95Q2
+RESPOND        1              0           0        2739           0      408.65    6.926375    28.74499     6.842572    62.67193    INPUT    tot $ 95Q2
+_OVERALL_                     0           0       48356           0      555.25    3.649963    19.40428     9.251186    124.3032    INPUT    tot $ 95Q2
+
+
+Data Role=TRAIN Variable=DOLLARQ11
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0       649.7     3.80492    19.65524     10.35023    174.3876    INPUT    tot $ 95Q3
+RESPOND        1              0           0        2739           0       425.5    7.297762    29.51511     6.971937    65.62511    INPUT    tot $ 95Q3
+_OVERALL_                     0           0       48356           0       649.7    4.002763     20.3574     10.02275    160.0096    INPUT    tot $ 95Q3
+
+
+Data Role=TRAIN Variable=DOLLARQ12
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0        1109    6.063542    26.51071     9.899611    191.8885    INPUT    tot $ 95Q4
+RESPOND        1              0           0        2739           0      678.51    12.08846    39.99565     7.096091    78.48071    INPUT    tot $ 95Q4
+_OVERALL_                     0           0       48356           0        1109    6.404808     27.4868     9.658056     177.371    INPUT    tot $ 95Q4
+
+
+Data Role=TRAIN Variable=DOLLARQ13
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0     1407.01    5.165534    25.16382      15.1117    515.4538    INPUT    tot $ 96Q1
+RESPOND        1              0           0        2739           0      533.55    9.782472     35.8947     6.251491    53.05159    INPUT    tot $ 96Q1
+_OVERALL_                     0           0       48356           0     1407.01    5.427048    25.91223     14.02419    443.7675    INPUT    tot $ 96Q1
+
+
+Data Role=TRAIN Variable=DOLLARQ14
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0      997.85    4.188649    20.89663      11.2321    256.8431    INPUT    tot $ 96Q2
+RESPOND        1              0           0        2739           0        1487    8.275323    43.67876     18.69019    538.6339    INPUT    tot $ 96Q2
+_OVERALL_                     0           0       48356           0        1487    4.420128    22.82223     15.62889    584.6354    INPUT    tot $ 96Q2
+
+
+Data Role=TRAIN Variable=DOLLARQ15
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0       858.5    4.663668     23.0158     10.80071    205.5661    INPUT    tot $ 96Q3
+RESPOND        1              0           0        2739           0      503.95    9.158733    33.14445     6.179249    52.30353    INPUT    tot $ 96Q3
+_OVERALL_                     0           0       48356           0       858.5    4.918279    23.72771     10.28301     183.382    INPUT    tot $ 96Q3
+
+
+Data Role=TRAIN Variable=DOLLARQ16
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0      713.45    7.261104    29.24092     7.917175    98.22066    INPUT    tot $ 96Q4
+RESPOND        1              0           0        2739           0      678.15    14.53117    41.35278     5.605476    50.16918    INPUT    tot $ 96Q4
+_OVERALL_                     0           0       48356           0      713.45    7.672898    30.10401     7.703857    93.10502    INPUT    tot $ 96Q4
+
+
+Data Role=TRAIN Variable=DOLLARQ17
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0     1319.35    5.276594    24.87633     11.83394    306.3941    INPUT    tot $ 97Q1
+RESPOND        1              0           0        2739           0      438.05    10.74296    35.83471     5.571722    40.86671    INPUT    tot $ 97Q1
+_OVERALL_                     0           0       48356           0     1319.35    5.586222     25.6532      11.0741    264.7515    INPUT    tot $ 97Q1
+
+
+Data Role=TRAIN Variable=DOLLARQ18
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0       752.1    4.612252    22.39056     9.339538    144.8153    INPUT    tot $ 97Q2
+RESPOND        1              0           0        2739           0      486.15    10.95618    36.27364     5.370204     39.4762    INPUT    tot $ 97Q2
+_OVERALL_                     0           0       48356           0       752.1    4.971588    23.44341      8.86678    127.5209    INPUT    tot $ 97Q2
+
+
+Data Role=TRAIN Variable=DOLLARQ19
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0       559.2    4.171569    21.59825     9.664066    140.6688    INPUT    tot $ 97Q3
+RESPOND        1              0           0        2739           0      677.88    9.105451     33.8163     7.024176     81.5345    INPUT    tot $ 97Q3
+_OVERALL_                     0           0       48356           0      677.88    4.451036    22.49695     9.464529     137.274    INPUT    tot $ 97Q3
+
+
+Data Role=TRAIN Variable=DOLLARQ20
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0      768.85    8.064814    30.50179     7.515434    92.45299    INPUT    tot $ 97Q4
+RESPOND        1              0           0        2739           0       908.5    19.26501    51.52793     6.036659    62.18658    INPUT    tot $ 97Q4
+_OVERALL_                     0           0       48356           0       908.5     8.69922    32.16682     7.543856    95.52023    INPUT    tot $ 97Q4
+
+
+Data Role=TRAIN Variable=DOLLARQ21
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0      1084.3    4.432568     23.1125      12.7998    328.1488    INPUT    tot $ 98Q1
+RESPOND        1              0           0        2739           0      542.05    9.914816    34.62575     6.405912     58.5225    INPUT    tot $ 98Q1
+_OVERALL_                     0           0       48356           0      1084.3    4.743096    23.94625     11.99587    283.7185    INPUT    tot $ 98Q1
+
+
+Data Role=TRAIN Variable=DOLLARQ22
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role       Label
+
+RESPOND        0              0           0       45617           0       670.2     4.49098    22.46453     9.046402    128.1413    INPUT    tot $ 98Q2
+RESPOND        1              0           0        2739           0     1128.75    11.95974    46.44084     9.822622    161.0246    INPUT    tot $ 98Q2
+_OVERALL_                     0           0       48356           0     1128.75    4.914029     24.5188      10.4759    207.4614    INPUT    tot $ 98Q2
+
+
+Data Role=TRAIN Variable=DOLNETDA
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0         35.825           0       45617           0       768.5     45.2303    36.62692     3.696752    30.91631    INPUT    tot $ net demand
+RESPOND        1       37.87273           0        2739           0      432.75    46.48014    32.55725     2.724035    14.75716    INPUT    tot $ net demand
+_OVERALL_                  35.9           0       48356           0       768.5     45.3011     36.4094     3.659262      30.395    INPUT    tot $ net demand
+
+
+Data Role=TRAIN Variable=DOLNETDT
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0           90.6           0       45617           0      7421.6    179.3654    280.5313     5.888919    64.69891    INPUT    avg $ net demand
+RESPOND        1          159.9           0        2739           0     8028.98    329.3188    531.1769     4.986408    39.12735    INPUT    avg $ net demand
+_OVERALL_                 92.95           0       48356           0     8028.98    187.8592    302.3536     6.149697    69.60593    INPUT    avg $ net demand
+
+
+Data Role=TRAIN Variable=FREQPRCH
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              2           0       45617           1          96      3.9984    4.908008     4.124942     30.5051    INPUT    lifetime orders
+RESPOND        1              4           0        2739           1         150    6.974808    9.200971     4.303667    34.81301    INPUT    lifetime orders
+_OVERALL_                     2           0       48356           1         150    4.166991    5.290656     4.590923    42.57681    INPUT    lifetime orders
+
+
+Data Role=TRAIN Variable=MONLAST
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role           Label
+
+RESPOND        0             26           0       45617           0         271    39.50678    40.63078     1.741854    3.177934    INPUT    months since last
+RESPOND        1             12           0        2739           0         258    24.88098    32.25433     2.517379    7.725543    INPUT    months since last
+_OVERALL_                    25           0       48356           0         271    38.67834    40.34461      1.77074    3.309627    INPUT    months since last
+
+
+Data Role=TRAIN Variable=ORDERSIZE
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis     Role             Label
+
+RESPOND        0              0           0       45617           0           0           0           0            .           .    TARGET    dollar value of order
+RESPOND        1          43.85           0        2739         5.4      510.72    62.77013    59.94363     2.771339    10.80182    TARGET    dollar value of order
+_OVERALL_                     0           0       48356           0      510.72    3.555451    20.34696     9.691806     131.486    TARGET    dollar value of order
+
+
+Data Role=TRAIN Variable=TENURE
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0             70           0       45617           1         276    83.07168    59.90944      0.62344    -0.41788    INPUT    months since 1st
+RESPOND        1             76           0        2739           0         276    86.34319    63.20386     0.536682    -0.58884    INPUT    months since 1st
+_OVERALL_                    70           0       48356           0         276    83.25699    60.10494       0.6187    -0.42776    INPUT    months since 1st
+
+
+Data Role=TRAIN Variable=TOTORDQ01
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0           7    0.074753    0.305275     5.184263    39.74042    INPUT    tot orders 93Q1
+RESPOND        1              0           0        2739           0           6    0.128149      0.4299     4.778286    33.68945    INPUT    tot orders 93Q1
+_OVERALL_                     0           0       48356           0           7    0.077777    0.313897     5.218707    40.65253    INPUT    tot orders 93Q1
+
+
+Data Role=TRAIN Variable=TOTORDQ02
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0           4    0.070632    0.292188     4.807917    28.11126    INPUT    tot orders 93Q2
+RESPOND        1              0           0        2739           0           8    0.120117     0.43558     6.125572    63.53737    INPUT    tot orders 93Q2
+_OVERALL_                     0           0       48356           0           8    0.073435    0.302344     5.160261    39.30277    INPUT    tot orders 93Q2
+
+
+Data Role=TRAIN Variable=TOTORDQ03
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0           7     0.05715    0.255765     5.305324    40.53214    INPUT    tot orders 93Q3
+RESPOND        1              0           0        2739           0           4    0.086163    0.321875     4.394259    24.31309    INPUT    tot orders 93Q3
+_OVERALL_                     0           0       48356           0           7    0.058793    0.260042     5.243599    39.13779    INPUT    tot orders 93Q3
+
+
+Data Role=TRAIN Variable=TOTORDQ04
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0          16    0.087752     0.33027     6.830481    150.9313    INPUT    tot orders 93Q4
+RESPOND        1              0           0        2739           0           9    0.136181    0.445005     6.298306    79.25115    INPUT    tot orders 93Q4
+_OVERALL_                     0           0       48356           0          16    0.090495    0.337992     6.843372    143.6122    INPUT    tot orders 93Q4
+
+
+Data Role=TRAIN Variable=TOTORDQ05
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0           5    0.084837    0.317338     4.361029    23.81713    INPUT    tot orders 94Q1
+RESPOND        1              0           0        2739           0           4    0.147864    0.452699     3.676621    15.87498    INPUT    tot orders 94Q1
+_OVERALL_                     0           0       48356           0           5    0.088407    0.326826     4.349332     23.6723    INPUT    tot orders 94Q1
+
+
+Data Role=TRAIN Variable=TOTORDQ06
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0           5    0.076507    0.296233     4.413013    24.11138    INPUT    tot orders 94Q2
+RESPOND        1              0           0        2739           0           9    0.123038    0.436441     6.521736    81.26338    INPUT    tot orders 94Q2
+_OVERALL_                     0           0       48356           0           9    0.079142     0.30608     4.870796    39.62242    INPUT    tot orders 94Q2
+
+
+Data Role=TRAIN Variable=TOTORDQ07
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0           5    0.081899    0.308878     4.389019    24.38269    INPUT    tot orders 94Q3
+RESPOND        1              0           0        2739           0           8    0.138007      0.4578     6.313001    74.63409    INPUT    tot orders 94Q3
+_OVERALL_                     0           0       48356           0           8    0.085077    0.319432     4.826688    38.65863    INPUT    tot orders 94Q3
+
+
+Data Role=TRAIN Variable=TOTORDQ08
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0          42    0.111318    0.420732     27.45261    2354.241    INPUT    tot orders 94Q4
+RESPOND        1              0           0        2739           0          10    0.215042    0.564451     4.875668    47.99696    INPUT    tot orders 94Q4
+_OVERALL_                     0           0       48356           0          42    0.117193    0.430817     24.77151    2027.439    INPUT    tot orders 94Q4
+
+
+Data Role=TRAIN Variable=TOTORDQ09
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0           5    0.087007     0.31713     4.226955    22.88554    INPUT    tot orders 95Q1
+RESPOND        1              0           0        2739           0           4    0.140562    0.418214     3.544978    15.57017    INPUT    tot orders 95Q1
+_OVERALL_                     0           0       48356           0           5    0.090041    0.323931      4.19222    22.49128    INPUT    tot orders 95Q1
+
+
+Data Role=TRAIN Variable=TOTORDQ10
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0           4    0.070434     0.28529      4.60612    25.57257    INPUT    tot orders 95Q2
+RESPOND        1              0           0        2739           0           6    0.131435    0.432721     4.608426    31.37382    INPUT    tot orders 95Q2
+_OVERALL_                     0           0       48356           0           6    0.073889    0.295941     4.748208    29.63758    INPUT    tot orders 95Q2
+
+
+Data Role=TRAIN Variable=TOTORDQ11
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0           7    0.080058    0.303277     4.474214    28.30133    INPUT    tot orders 95Q3
+RESPOND        1              0           0        2739           0           6    0.143483    0.441878     4.163284     25.6432    INPUT    tot orders 95Q3
+_OVERALL_                     0           0       48356           0           7     0.08365     0.31311     4.532181    29.76623    INPUT    tot orders 95Q3
+
+
+Data Role=TRAIN Variable=TOTORDQ12
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0          21    0.119495    0.390658     7.072449    202.1826    INPUT    tot orders 95Q4
+RESPOND        1              0           0        2739           0           9    0.232567    0.562674     3.848463     29.5139    INPUT    tot orders 95Q4
+_OVERALL_                     0           0       48356           0          21      0.1259    0.403211     6.706015    174.8138    INPUT    tot orders 95Q4
+
+
+Data Role=TRAIN Variable=TOTORDQ13
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0           6    0.105882    0.348513     3.820998    18.99603    INPUT    tot orders 96Q1
+RESPOND        1              0           0        2739           0           4    0.171595    0.453599     2.953435    9.866318    INPUT    tot orders 96Q1
+_OVERALL_                     0           0       48356           0           6    0.109604    0.355616     3.759706    18.18345    INPUT    tot orders 96Q1
+
+
+Data Role=TRAIN Variable=TOTORDQ14
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0           6    0.086284    0.314448     4.270977    24.93207    INPUT    tot orders 96Q2
+RESPOND        1              0           0        2739           0           3    0.141292    0.410917      3.30446    12.53074    INPUT    tot orders 96Q2
+_OVERALL_                     0           0       48356           0           6    0.089399    0.320935     4.200985    23.76373    INPUT    tot orders 96Q2
+
+
+Data Role=TRAIN Variable=TOTORDQ15
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0          14    0.094307     0.33926     5.514634    86.11186    INPUT    tot orders 96Q3
+RESPOND        1              0           0        2739           0           5      0.1705    0.467879     3.457306     15.8429    INPUT    tot orders 96Q3
+_OVERALL_                     0           0       48356           0          14    0.098623    0.348258      5.31424    76.35668    INPUT    tot orders 96Q3
+
+
+Data Role=TRAIN Variable=TOTORDQ16
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0          11    0.138764     0.41625     4.414298    41.87703    INPUT    tot orders 96Q4
+RESPOND        1              0           0        2739           0           6    0.276013    0.595618     2.888845    12.36513    INPUT    tot orders 96Q4
+_OVERALL_                     0           0       48356           0          11    0.146538    0.429586      4.27591    37.83939    INPUT    tot orders 96Q4
+
+
+Data Role=TRAIN Variable=TOTORDQ17
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0           5    0.104807    0.349372     3.831923    18.01962    INPUT    tot orders 97Q1
+RESPOND        1              0           0        2739           0           4    0.202994    0.514627     3.093293     11.7414    INPUT    tot orders 97Q1
+_OVERALL_                     0           0       48356           0           5    0.110369    0.361466     3.817627    18.09198    INPUT    tot orders 97Q1
+
+
+Data Role=TRAIN Variable=TOTORDQ18
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0           5    0.089046    0.319699     4.142542    21.77453    INPUT    tot orders 97Q2
+RESPOND        1              0           0        2739           0           4    0.193501    0.490764     2.861348    9.123189    INPUT    tot orders 97Q2
+_OVERALL_                     0           0       48356           0           5    0.094962    0.332624      4.05434     20.6283    INPUT    tot orders 97Q2
+
+
+Data Role=TRAIN Variable=TOTORDQ19
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0           4    0.078589    0.295725      4.17093    20.51489    INPUT    tot orders 97Q3
+RESPOND        1              0           0        2739           0           5    0.158817    0.451406     3.680369    19.21573    INPUT    tot orders 97Q3
+_OVERALL_                     0           0       48356           0           5    0.083133    0.307215     4.222505    22.38698    INPUT    tot orders 97Q3
+
+
+Data Role=TRAIN Variable=TOTORDQ20
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0          22    0.148782    0.423859     6.257399    174.5595    INPUT    tot orders 97Q4
+RESPOND        1              0           0        2739           0          27    0.343556    0.849894     13.10508    362.1374    INPUT    tot orders 97Q4
+_OVERALL_                     0           0       48356           0          27    0.159815    0.460877     9.418567     362.597    INPUT    tot orders 97Q4
+
+
+Data Role=TRAIN Variable=TOTORDQ21
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0           6    0.086086    0.312999     4.222273    23.57191    INPUT    tot orders 98Q1
+RESPOND        1              0           0        2739           0           9     0.18693    0.505735     4.541898    43.23639    INPUT    tot orders 98Q1
+_OVERALL_                     0           0       48356           0           9    0.091798    0.327788       4.4856    33.56975    INPUT    tot orders 98Q1
+
+
+Data Role=TRAIN Variable=TOTORDQ22
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              0           0       45617           0           4    0.081154    0.296624     3.982015    18.54265    INPUT    tot orders 98Q2
+RESPOND        1              0           0        2739           0           6    0.202994    0.522376      3.47717    17.47316    INPUT    tot orders 98Q2
+_OVERALL_                     0           0       48356           0           6    0.088055    0.315034     4.150825    22.88131    INPUT    tot orders 98Q2
+
+
+Data Role=TRAIN Variable=UNITSIDD
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              5           0       45617           1         326    10.40592    15.85006     5.535714    54.90906    INPUT    tot units demand
+RESPOND        1             10           0        2739           1         432     19.5586    30.54198     5.414356    48.92574    INPUT    tot units demand
+_OVERALL_                     5           0       48356           1         432    10.92435    17.15485     6.052984     69.5553    INPUT    tot units demand
+
+
+Data Role=TRAIN Variable=UNITSLAP
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role         Label
+
+RESPOND        0          16.88           0       45617           1       768.5    22.18878    20.76719     6.959448    112.2569    INPUT    avg price/unit
+RESPOND        1       16.83115           0        2739        2.17         260    19.73828    13.55763     5.113106    54.74535    INPUT    avg price/unit
+_OVERALL_                16.875           0       48356           1       768.5    22.04998    20.43467     6.986767    113.7625    INPUT    avg price/unit
+
+
+Data Role=TRAIN Variable=UNTLANPO
+
+             Target                                 Non                                        Standard
+ Target      Level       Median     Missing     Missing     Minimum     Maximum        Mean    Deviation    Skewness    Kurtosis    Role          Label
+
+RESPOND        0              2           0       45617           1         121    2.658196    2.336743     8.070256    222.7144    INPUT    avg units/order
+RESPOND        1         2.3125           0        2739           1    17.16667      2.8451     1.95491     2.275609     7.80456    INPUT    avg units/order
+_OVERALL_                     2           0       48356           1         121    2.668783    2.317183     7.880936    217.4007    INPUT    avg units/order
+ 
+                                                                                                                                                                                                                                                                
+ 
+Correlation Statistics
+(maximum 500 observations printed)
+
+Data Role=TRAIN Type=PEARSON Target=ORDERSIZE
+
+Input         Correlation
+
+DOLL24           0.18137 
+DOLINDET         0.16337 
+DOLNETDT         0.16105 
+UNITSIDD         0.15411 
+FREQPRCH         0.12591 
+CATALOGCNT       0.12319 
+DEPT25           0.11543 
+DOLLARQ20        0.10873 
+DEPT22           0.10799 
+DEPT03           0.10082 
+DOLLARQ22        0.09917 
+ACTBUY           0.09912 
+DEPT13           0.09456 
+TOTORDQ20        0.09415 
+DEPT14           0.09131 
+TOTORDQ22        0.08917 
+DEPT04           0.08479 
+DEPT01           0.08453 
+DOLLARQ19        0.08350 
+DEPT23           0.08170 
+DEPT02           0.07961 
+DOLLARQ18        0.07760 
+DOLLARQ16        0.07473 
+DEPT17           0.07200 
+TOTORDQ21        0.07047 
+DEPT08           0.06933 
+DEPT05           0.06841 
+DOLLARQ21        0.06799 
+DEPT24           0.06792 
+TOTORDQ19        0.06599 
+DOLLARQ12        0.06459 
+DOLLARQ10        0.06440 
+DEPT06           0.06435 
+DOLLARQ15        0.06362 
+TOTORDQ16        0.06346 
+DOLLARQ11        0.06303 
+TOTORDQ18        0.06244 
+DOLLARQ17        0.06174 
+DEPT10           0.05926 
+BUYPROP          0.05855 
+TOTORDQ17        0.05701 
+TOTORDQ15        0.05515 
+DOLLARQ08        0.05441 
+TOTORDQ12        0.05436 
+DEPT15           0.05329 
+DOLLARQ14        0.05279 
+DEPT27           0.05204 
+DOLLARQ13        0.05171 
+DOLNETDA         0.05153 
+DOLINDEA         0.05088 
+TOTORDQ08        0.05014 
+DOLLARQ06        0.04939 
+TOTORDQ10        0.04881 
+DEPT16           0.04868 
+DEPT26           0.04683 
+DEPT12           0.04658 
+UNTLANPO         0.04460 
+TOTORDQ11        0.04418 
+DEPT11           0.04416 
+DOLLARQ07        0.04359 
+DOLLARQ05        0.04319 
+TOTORDQ14        0.04186 
+TOTORDQ01        0.04069 
+DOLLARQ02        0.03978 
+TOTORDQ07        0.03973 
+TOTORDQ04        0.03864 
+TOTORDQ09        0.03752 
+DOLLARQ03        0.03710 
+TOTORDQ06        0.03678 
+DEPT09           0.03672 
+TOTORDQ02        0.03599 
+TOTORDQ13        0.03559 
+TOTORDQ05        0.03445 
+DOLLARQ01        0.03381 
+TOTORDQ03        0.03226 
+DOLLARQ09        0.03218 
+DOLLARQ04        0.03211 
+DEPT07           0.02995 
+DEPT19           0.02715 
+DEPT18           0.02097 
+DEPT20           0.01721 
+TENURE           0.01350 
+DEPT21           0.01082 
+UNITSLAP        -0.00850 
+MONLAST         -0.06504 
+DAYLAST         -0.06505 
+ 
+                                                                                                                                                                                                                                                                
+ 
+Chi-Square Statistics
+(maximum 500 observations printed)
+
+Data Role=TRAIN Target=RESPOND
+
+ Input      Chi-Square    Df      Prob
+
+METHPAYM      161.3031     3    <.0001
+BOTHPAYM      105.5684     1    <.0001
+CCPAYM          6.2267     1    0.0126
+PCPAYM          0.5362     1    0.4640

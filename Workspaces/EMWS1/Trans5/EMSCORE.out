@@ -1,0 +1,10 @@
+ 
+                                                                                                                                                                                                                                                                
+ 
+Formula Transformations
+(maximum 500 observations printed)
+
+ Variable              Measurement
+   Name       Role        Level              Formula
+
+GiftDolAll    INPUT     INTERVAL      GiftAvgAll*GiftCntAll

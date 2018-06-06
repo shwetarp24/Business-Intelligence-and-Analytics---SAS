@@ -1,0 +1,44 @@
+ 
+                                                                                                                                                                                                                                                                
+ 
+ 
+Variable Summary
+
+            Measurement    Frequency
+Role           Level         Count
+
+ID           NOMINAL           1    
+INPUT        INTERVAL          4    
+INPUT        NOMINAL           5    
+REJECTED     INTERVAL          1    
+REJECTED     NOMINAL           1    
+TARGET       BINARY            1    
+ 
+                                                                                                                                                                                                                                                                
+ 
+ 
+
+The CORR Procedure
+
+   2  Variables:    TargetBuy TargetAmt 
+
+
+                                                    Simple Statistics
+ 
+Variable            N          Mean       Std Dev           Sum       Minimum       Maximum    Label
+
+TargetBuy       22223       0.24772       0.43170          5505             0       1.00000    Organics Purchase Indicator
+TargetAmt       22223       0.29474       0.56283          6550             0       3.00000    Organics Purchase Count    
+
+
+     Pearson Correlation Coefficients, N = 22223 
+              Prob > |r| under H0: Rho=0
+ 
+                                   Target        Target
+                                      Buy           Amt
+
+TargetBuy                         1.00000       0.91261
+Organics Purchase Indicator                      <.0001
+
+TargetAmt                         0.91261       1.00000
+Organics Purchase Count            <.0001              

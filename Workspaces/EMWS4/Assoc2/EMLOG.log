@@ -1,0 +1,1088 @@
+*------------------------------------------------------------*
+User:                pkumari1
+Date:                April 23, 2017
+Time:                02:06:43
+Site:                70117250
+Platform:            X64_DSRV12
+Maintenance Release: 9.04.01M3P062415
+EM Version:          14.1
+* 
+*------------------------------------------------------------*
+* Training Log
+Date:                April 23, 2017
+Time:                02:06:41
+*------------------------------------------------------------*
+10867  proc freq data=EMWS4.Assoc2_VariableSet noprint;
+10868  table ROLE*LEVEL/out=WORK.Assoc2META;
+10869  run;
+ 
+NOTE: There were 3 observations read from the data set EMWS4.ASSOC2_VARIABLESET.
+NOTE: The data set WORK.ASSOC2META has 3 observations and 4 variables.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+ 
+ 
+10870  proc print data=WORK.Assoc2META label noobs;
+10871  var ROLE LEVEL COUNT;
+10872  label ROLE = "%sysfunc(sasmsg(sashelp.dmine, meta_role_vlabel, NOQUOTE))" LEVEL = "%sysfunc(sasmsg(sashelp.dmine, meta_level_vlabel, NOQUOTE))" COUNT = "%sysfunc(sasmsg(sashelp.dmine, rpt_count_vlabel, NOQUOTE))";
+10873  title9 ' ';
+10874  title10 "%sysfunc(sasmsg(sashelp.dmine, rpt_varSummary_title  , NOQUOTE))";
+10875  run;
+ 
+NOTE: There were 3 observations read from the data set WORK.ASSOC2META.
+NOTE: The PROCEDURE PRINT printed page 1.
+NOTE: PROCEDURE PRINT used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+ 
+ 
+10876  title10;
+ 
+10884  *------------------------------------------------------------*;
+10885  * Assoc2: Sorting Training Data;
+10886  *------------------------------------------------------------*;
+10887  proc sort data=EMWS4.Ids_DATA(keep=VISIT SERVICE ACCOUNT) out=WORK.SORTEDTRAIN;
+10888  by ACCOUNT VISIT;
+10889  run;
+ 
+NOTE: There were 32367 observations read from the data set EMWS4.IDS_DATA.
+NOTE: View EMWS4.IDS_DATA.VIEW used (Total process time):
+      real time           0.04 seconds
+      cpu time            0.03 seconds
+ 
+NOTE: There were 32367 observations read from the data set BIA.BANK.
+NOTE: The data set WORK.SORTEDTRAIN has 32367 observations and 3 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           0.07 seconds
+      cpu time            0.04 seconds
+ 
+ 
+10890  *------------------------------------------------------------* ;
+10891  * EM: DMDBClass Macro ;
+10892  *------------------------------------------------------------* ;
+10893  %macro DMDBClass;
+10894      SERVICE(DESC)
+10895  %mend DMDBClass;
+10896  *------------------------------------------------------------* ;
+10897  * EM: DMDBVar Macro ;
+10898  *------------------------------------------------------------* ;
+10899  %macro DMDBVar;
+10900      VISIT
+10901  %mend DMDBVar;
+10902  *------------------------------------------------------------*;
+10903  * EM: Create DMDB;
+10904  *------------------------------------------------------------*;
+10905  proc dmdb batch data=WORK.SORTEDTRAIN
+10906  dmdbcat=WORK.EM_DMDB
+10907  maxlevel = 100001
+10908  normlen= 256
+10909  out=WORK.EM_DMDB
+10910  ;
+10911  id
+10912  ACCOUNT
+10913  ;
+10914  class %DMDBClass;
+10915  var %DMDBVar;
+10916  target
+10917  SERVICE
+10918  ;
+10919  run;
+ 
+NOTE: Records processed = 32367   Memory used = 511K.
+NOTE: There were 32367 observations read from the data set WORK.SORTEDTRAIN.
+NOTE: The data set WORK.EM_DMDB has 32367 observations and 3 variables.
+NOTE: PROCEDURE DMDB used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+ 
+ 
+10920  quit;
+ 
+number_of_elements=1
+number_of_elements=1
+10921  options nocleanup;
+10922  proc assoc dmdb dmdbcat=WORK.EM_DMDB out=EMWS4.Assoc2_ASSOC data=WORK.EM_DMDB
+10923  pctsup = 5
+10924  items=4
+10925  ;
+10926  customer
+10927  ACCOUNT
+10928  ;
+10929  target
+10930  SERVICE
+10931  ;
+10932  run;
+ 
+ 
+----- Potential 1 item sets = 13 -----
+Counting items, records read:    32367
+Number of customers:              7991
+Support level for item sets:       342
+Maximum count for a set:          6855
+Sets meeting support level:         12
+Megs of memory used:              0.51
+ 
+----- Potential 2 item sets = 66 -----
+Counting items, records read:    32367
+Maximum count for a set:          4329
+Sets meeting support level:         28
+Megs of memory used:              0.51
+ 
+----- Potential 3 item sets = 27 -----
+Counting items, records read:    32367
+Maximum count for a set:          1986
+Sets meeting support level:         19
+Megs of memory used:              0.51
+ 
+----- Potential 4 item sets = 2 -----
+Counting items, records read:    32367
+Maximum count for a set:           487
+Sets meeting support level:          2
+Megs of memory used:              0.51
+NOTE: The data set EMWS4.ASSOC2_ASSOC has 62 observations and 6 variables.
+NOTE: PROCEDURE ASSOC used (Total process time):
+      real time           0.04 seconds
+      cpu time            0.01 seconds
+ 
+ 
+10933  quit;
+10934
+10935
+ 
+Consolidate Time (SAME) and Maximum Duration (WINDOW) options have been reset.
+SAME must be greater than WINDOW.
+10936  proc sequence data=WORK.EM_DMDB dmdbcat=WORK.EM_DMDB assoc=EMWS4.Assoc2_ASSOC out=EMWS4.Assoc2_SEQUENCE nitems = 3
+10937  pctsup = 2;
+10938  customer ACCOUNT;
+10939  target SERVICE;
+10940  visit VISIT
+10941  ;
+10942  run;
+ 
+Large itemsets:              61
+Total records read:       32367
+Customer count:            7991
+Support set to:             159
+Total sequences formed:       77
+Number >= support            59
+--- Number Items:         3 ---
+Total records read:       32367
+Customer count:            7991
+Total Litem Sequences:      229
+Number >= support            82
+Memory allocated megs:        7
+NOTE: The data set EMWS4.ASSOC2_SEQUENCE has 141 observations and 9 variables.
+NOTE: PROCEDURE SEQUENCE used (Total process time):
+      real time           0.04 seconds
+      cpu time            0.03 seconds
+ 
+ 
+10943  quit;
+10944
+ 
+10945  *------------------------------------------------------------*;
+10946  * Assoc2: Selecting rules;
+10947  *------------------------------------------------------------*;
+10948  proc sort data=EMWS4.Assoc2_SEQUENCE;
+10949  by descending SUPPORT;
+10950  run;
+ 
+NOTE: There were 141 observations read from the data set EMWS4.ASSOC2_SEQUENCE.
+NOTE: The data set EMWS4.ASSOC2_SEQUENCE has 141 observations and 9 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+ 
+ 
+10951  data WORK.ASSOCSUBSET;
+10952  set EMWS4.Assoc2_SEQUENCE(obs=141);
+10953  index=_N_;
+10954  label index = "%sysfunc(sasmsg(sashelp.dmine, rpt_ruleIndex_vlabel,  NOQUOTE))";
+10955  label _LHAND = "%sysfunc(sasmsg(sashelp.dmine, rpt_leftHandSide_vlabel,  NOQUOTE))";
+10956  label _RHAND = "%sysfunc(sasmsg(sashelp.dmine, rpt_rightHandSide_vlabel,  NOQUOTE))";
+10957  run;
+ 
+NOTE: Variable _LHAND is uninitialized.
+NOTE: Variable _RHAND is uninitialized.
+NOTE: There were 141 observations read from the data set EMWS4.ASSOC2_SEQUENCE.
+NOTE: The data set WORK.ASSOCSUBSET has 141 observations and 10 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+ 
+ 
+10958  *------------------------------------------------------------*;
+10959  * Assoc2: Creating Links and Nodes data sets;
+10960  *------------------------------------------------------------*;
+10961  data EMWS4.Assoc2_LINKS(rename=(ISET1=FROM ISET2=TO)) left(keep=ISET1 rename=(ISET1=ITEM)) right(keep=ISET2 rename=(ISET2=ITEM));
+10962  label ISET1= "%sysfunc(sasmsg(sashelp.dmine, rpt_from_vlabel ,          NOQUOTE))" ISET2= "%sysfunc(sasmsg(sashelp.dmine, rpt_to_vlabel,             NOQUOTE))";
+10963  set WORK.ASSOCSUBSET;
+10964  keep LINKID COUNT SUPPORT CONF ISET1 ISET2;
+10965  label LINKID = "%sysfunc(sasmsg(sashelp.dmine, rpt_varclus_label_linkid , NOQUOTE))";
+10966  LINKID = _N_;
+10967  run;
+ 
+NOTE: There were 141 observations read from the data set WORK.ASSOCSUBSET.
+NOTE: The data set EMWS4.ASSOC2_LINKS has 141 observations and 6 variables.
+NOTE: The data set WORK.LEFT has 141 observations and 1 variables.
+NOTE: The data set WORK.RIGHT has 141 observations and 1 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.01 seconds
+ 
+ 
+10968  data WORK.ASSOCTEMP;
+10969  set left right;
+10970  where ITEM ne '';
+10971  run;
+ 
+NOTE: There were 141 observations read from the data set WORK.LEFT.
+      WHERE ITEM not = ' ';
+NOTE: There were 141 observations read from the data set WORK.RIGHT.
+      WHERE ITEM not = ' ';
+NOTE: The data set WORK.ASSOCTEMP has 282 observations and 1 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+ 
+ 
+10972  proc sort data=WORK.ASSOCTEMP nodup;
+10973  by ITEM;
+10974  run;
+ 
+NOTE: There were 282 observations read from the data set WORK.ASSOCTEMP.
+NOTE: 270 duplicate observations were deleted.
+NOTE: The data set WORK.ASSOCTEMP has 12 observations and 1 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+ 
+ 
+10975  data WORK.ITEMS (keep = ITEM COUNT);
+10976  set EMWS4.Assoc2_ASSOC;
+10977  where set_size=1;
+10978  ITEM= ITEM1;
+10979  run;
+ 
+NOTE: There were 12 observations read from the data set EMWS4.ASSOC2_ASSOC.
+      WHERE set_size=1;
+NOTE: The data set WORK.ITEMS has 12 observations and 2 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+ 
+ 
+10980  proc sort data=WORK.ITEMS;
+10981  by ITEM;
+10982  run;
+ 
+NOTE: There were 12 observations read from the data set WORK.ITEMS.
+NOTE: The data set WORK.ITEMS has 12 observations and 2 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+ 
+ 
+10983  data EMWS4.Assoc2_NODES;
+10984  merge WORK.ASSOCTEMP(in=a) WORK.ITEMS;
+10985  by ITEM;
+10986  if a then output;
+10987  run;
+ 
+NOTE: There were 12 observations read from the data set WORK.ASSOCTEMP.
+NOTE: There were 12 observations read from the data set WORK.ITEMS.
+NOTE: The data set EMWS4.ASSOC2_NODES has 12 observations and 2 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+ 
+ 
+10988  data EMWS4.Assoc2_NODES;
+10989  set EMWS4.Assoc2_NODES;
+10990  if COUNT=. then COUNT=-1;
+10991  label ITEM = "%sysfunc(sasmsg(sashelp.dmine, rpt_item_vlabel ,     NOQUOTE))" COUNT = "%sysfunc(sasmsg(sashelp.dmine, rpt_count_vlabel ,    NOQUOTE))";
+10992  run;
+ 
+NOTE: There were 12 observations read from the data set EMWS4.ASSOC2_NODES.
+NOTE: The data set EMWS4.ASSOC2_NODES has 12 observations and 2 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.01 seconds
+ 
+ 
+10993  *------------------------------------------------------------*;
+10994  * Assoc2: Creating Rules data set;
+10995  *------------------------------------------------------------*;
+10996  proc sort data=WORK.ASSOCSUBSET out=EMWS4.Assoc2_RULES;
+10997  by descending SUPPORT
+10998  ISET3
+10999  ISET2
+11000  ISET1
+11001  ;
+11002  run;
+ 
+NOTE: There were 141 observations read from the data set WORK.ASSOCSUBSET.
+NOTE: The data set EMWS4.ASSOC2_RULES has 141 observations and 10 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+ 
+ 
+11003  data EMWS4.Assoc2_RULES;
+11004  set EMWS4.Assoc2_RULES;
+11005  length _LHAND _RHAND $39;
+11006  _RHAND = left(reverse(scan(reverse(RULE),1,'>==')));
+11007  ind = index(left(reverse(RULE)),'>==')+4;
+11008  _LHAND = left(reverse(substr(left(reverse(RULE)), ind)));
+11009  label _LHAND = "%sysfunc(sasmsg(sashelp.dmine, rpt_leftHandSide_vlabel,  NOQUOTE))";
+11010  label _RHAND = "%sysfunc(sasmsg(sashelp.dmine, rpt_rightHandSide_vlabel,  NOQUOTE))";
+11011  drop ind;
+11012  run;
+ 
+NOTE: There were 141 observations read from the data set EMWS4.ASSOC2_RULES.
+NOTE: The data set EMWS4.ASSOC2_RULES has 141 observations and 12 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.01 seconds
+ 
+ 
+11013  *------------------------------------------------------------*;
+11014  * Assoc2: Marking Rules to Transpose;
+11015  *------------------------------------------------------------*;
+11016  data EMWS4.Assoc2_RULES;
+11017  set EMWS4.Assoc2_RULES;
+11018  label Transpose= "%sysfunc(sasmsg(sashelp.dmine, rpt_transposeRule_vlabel,  NOQUOTE))";
+11019  if _N_ <= 141 then Transpose=1;
+11020  else Transpose=0;
+11021  run;
+ 
+NOTE: There were 141 observations read from the data set EMWS4.ASSOC2_RULES.
+NOTE: The data set EMWS4.ASSOC2_RULES has 141 observations and 13 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.01 seconds
+ 
+ 
+11022  %let numtransrules = 0;
+11023  data ruleid;
+11024  set EMWS4.Assoc2_RULES(where=(transpose=1)) end=eof;
+11025  ruleid = _N_;
+11026  drop transpose;
+11027  if eof then call symput('numtransrules', strip(put(_N_, best.)));
+11028  run;
+ 
+NOTE: There were 141 observations read from the data set EMWS4.ASSOC2_RULES.
+      WHERE transpose=1;
+NOTE: The data set WORK.RULEID has 141 observations and 13 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+ 
+ 
+11029  *------------------------------------------------------------*;
+11030  * Assoc2: Creating RULEMAP and TRAIN data sets;
+11031  *------------------------------------------------------------*;
+11032  proc mbscore data=WORK.SORTEDTRAIN out=score_ruleid INCLUDE ALL_ID;
+11033  customer ACCOUNT;
+11034  target SERVICE;
+11035  sequence VISIT
+11036  ;
+11037  rules data=work.ruleid;
+11038  run;
+ 
+NOTE: Formats on CUSTOMER/ID variable(s) are not supported.
+WARNING: Format BEST is ignored.
+NOTE: The data set WORK.RULEID has 141 observations and 13 variables.
+NOTE: The data set WORK.SCORE_RULEID has 72057 observations and 2 variables.
+NOTE: PROCEDURE MBSCORE used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.03 seconds
+ 
+ 
+11039  data EMWS4.Assoc2_TRAIN;
+11040  set score_ruleid;
+11041  array _r{141} _r1-_r141 (141*0);
+11042  by ACCOUNT;
+11043  if first.ACCOUNT then do;
+11044  do i=1 to 141;
+11045  _r[i]=0;
+11046  end;
+11047  end;
+11048  if ruleid ne . then _r[ruleid]=1;
+11049  if last.ACCOUNT then output;
+11050  drop i ruleid;
+11051  run;
+ 
+NOTE: There were 72057 observations read from the data set WORK.SCORE_RULEID.
+NOTE: The data set EMWS4.ASSOC2_TRAIN has 7991 observations and 142 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.12 seconds
+      cpu time            0.04 seconds
+ 
+ 
+11052  data _null_;
+11053  set ruleid end = eof;
+11054  if _N_=1 then do;
+11055  call execute("proc datasets lib=EMWS4 nolist;");
+11056  call execute("   modify Assoc2_TRAIN;");
+11057  end;
+11058  call execute("   rename _r"!!strip(put(_N_, best.))!!"= RULE"!!strip(put(INDEX, best.))!!";");
+11059  call execute("   label  RULE"!!strip(put(INDEX, best.))!!'='!!quote(RULE)!!";");
+11060  if eof then do;
+11061  call execute("run;");
+11062  call execute("quit;");
+11063  end;
+11064  run;
+ 
+NOTE: There were 141 observations read from the data set WORK.RULEID.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+ 
+ 
+NOTE: CALL EXECUTE generated line.
+1     + proc datasets lib=EMWS4 nolist;
+2     +    modify Assoc2_TRAIN;
+3     +    rename _r1= RULE1;
+NOTE: Renaming variable _r1 to RULE1.
+4     +    label  RULE1="CKING ==> SVG                          ";
+5     +    rename _r2= RULE2;
+NOTE: Renaming variable _r2 to RULE2.
+6     +    label  RULE2="CKING ==> ATM                          ";
+7     +    rename _r3= RULE3;
+NOTE: Renaming variable _r3 to RULE3.
+8     +    label  RULE3="SVG ==> ATM                            ";
+9     +    rename _r4= RULE4;
+NOTE: Renaming variable _r4 to RULE4.
+10    +    label  RULE4="CKING ==> SVG ==> ATM                  ";
+11    +    rename _r5= RULE5;
+NOTE: Renaming variable _r5 to RULE5.
+12    +    label  RULE5="ATM ==> ATM                            ";
+13    +    rename _r6= RULE6;
+NOTE: Renaming variable _r6 to RULE6.
+14    +    label  RULE6="CKING ==> CD                           ";
+15    +    rename _r7= RULE7;
+NOTE: Renaming variable _r7 to RULE7.
+16    +    label  RULE7="CKING ==> ATM ==> ATM                  ";
+17    +    rename _r8= RULE8;
+NOTE: Renaming variable _r8 to RULE8.
+18    +    label  RULE8="CKING ==> HMEQLC                       ";
+19    +    rename _r9= RULE9;
+NOTE: Renaming variable _r9 to RULE9.
+20    +    label  RULE9="SVG ==> CD                             ";
+21    +    rename _r10= RULE10;
+NOTE: Renaming variable _r10 to RULE10.
+22    +    label  RULE10="CKING ==> MMDA                         ";
+23    +    rename _r11= RULE11;
+NOTE: Renaming variable _r11 to RULE11.
+24    +    label  RULE11="CKING ==> CCRD                         ";
+25    +    rename _r12= RULE12;
+NOTE: Renaming variable _r12 to RULE12.
+26    +    label  RULE12="CKING ==> SVG ==> CD                   ";
+27    +    rename _r13= RULE13;
+NOTE: Renaming variable _r13 to RULE13.
+28    +    label  RULE13="SVG ==> ATM ==> ATM                    ";
+29    +    rename _r14= RULE14;
+NOTE: Renaming variable _r14 to RULE14.
+30    +    label  RULE14="SVG ==> SVG                            ";
+31    +    rename _r15= RULE16;
+NOTE: Renaming variable _r15 to RULE16.
+32    +    label  RULE16="CKCRD ==> CKCRD                        ";
+33    +    rename _r16= RULE15;
+NOTE: Renaming variable _r16 to RULE15.
+34    +    label  RULE15="CKING ==> CKCRD                        ";
+35    +    rename _r17= RULE17;
+NOTE: Renaming variable _r17 to RULE17.
+36    +    label  RULE17="CKING ==> CKCRD ==> CKCRD              ";
+37    +    rename _r18= RULE18;
+NOTE: Renaming variable _r18 to RULE18.
+38    +    label  RULE18="SVG ==> HMEQLC                         ";
+39    +    rename _r19= RULE19;
+NOTE: Renaming variable _r19 to RULE19.
+40    +    label  RULE19="CKING ==> SVG ==> HMEQLC               ";
+41    +    rename _r20= RULE20;
+NOTE: Renaming variable _r20 to RULE20.
+42    +    label  RULE20="SVG ==> CCRD                           ";
+43    +    rename _r21= RULE21;
+NOTE: Renaming variable _r21 to RULE21.
+44    +    label  RULE21="CKING ==> SVG ==> CCRD                 ";
+45    +    rename _r22= RULE22;
+NOTE: Renaming variable _r22 to RULE22.
+46    +    label  RULE22="CD ==> CD                              ";
+47    +    rename _r23= RULE23;
+NOTE: Renaming variable _r23 to RULE23.
+48    +    label  RULE23="CKING ==> IRA                          ";
+49    +    rename _r24= RULE24;
+NOTE: Renaming variable _r24 to RULE24.
+50    +    label  RULE24="HMEQLC ==> HMEQLC                      ";
+51    +    rename _r25= RULE25;
+NOTE: Renaming variable _r25 to RULE25.
+52    +    label  RULE25="CKING ==> HMEQLC ==> HMEQLC            ";
+53    +    rename _r26= RULE26;
+NOTE: Renaming variable _r26 to RULE26.
+54    +    label  RULE26="CKING ==> SVG ==> SVG                  ";
+55    +    rename _r27= RULE27;
+NOTE: Renaming variable _r27 to RULE27.
+56    +    label  RULE27="ATM ==> HMEQLC                         ";
+57    +    rename _r28= RULE28;
+NOTE: Renaming variable _r28 to RULE28.
+58    +    label  RULE28="CKING ==> ATM ==> HMEQLC               ";
+59    +    rename _r29= RULE29;
+NOTE: Renaming variable _r29 to RULE29.
+60    +    label  RULE29="CKING ==> AUTO                         ";
+61    +    rename _r30= RULE30;
+NOTE: Renaming variable _r30 to RULE30.
+62    +    label  RULE30="SVG ==> CKCRD                          ";
+63    +    rename _r31= RULE31;
+NOTE: Renaming variable _r31 to RULE31.
+64    +    label  RULE31="SVG ==> CKCRD ==> CKCRD                ";
+65    +    rename _r32= RULE32;
+NOTE: Renaming variable _r32 to RULE32.
+66    +    label  RULE32="CKING ==> SVG ==> CKCRD                ";
+67    +    rename _r33= RULE33;
+NOTE: Renaming variable _r33 to RULE33.
+68    +    label  RULE33="MMDA ==> SVG                           ";
+69    +    rename _r34= RULE34;
+NOTE: Renaming variable _r34 to RULE34.
+70    +    label  RULE34="AUTO ==> AUTO                          ";
+71    +    rename _r35= RULE35;
+NOTE: Renaming variable _r35 to RULE35.
+72    +    label  RULE35="CKING ==> MMDA ==> SVG                 ";
+73    +    rename _r36= RULE36;
+NOTE: Renaming variable _r36 to RULE36.
+74    +    label  RULE36="CKING ==> MTG                          ";
+75    +    rename _r37= RULE37;
+NOTE: Renaming variable _r37 to RULE37.
+76    +    label  RULE37="CD ==> ATM                             ";
+77    +    rename _r38= RULE38;
+NOTE: Renaming variable _r38 to RULE38.
+78    +    label  RULE38="CKING ==> CD ==> ATM                   ";
+79    +    rename _r39= RULE39;
+NOTE: Renaming variable _r39 to RULE39.
+80    +    label  RULE39="CKING ==> AUTO ==> AUTO                ";
+81    +    rename _r40= RULE40;
+NOTE: Renaming variable _r40 to RULE40.
+82    +    label  RULE40="CKING ==> CD ==> CD                    ";
+83    +    rename _r41= RULE41;
+NOTE: Renaming variable _r41 to RULE41.
+84    +    label  RULE41="SVG ==> IRA                            ";
+85    +    rename _r42= RULE42;
+NOTE: Renaming variable _r42 to RULE42.
+86    +    label  RULE42="SVG ==> AUTO                           ";
+87    +    rename _r43= RULE43;
+NOTE: Renaming variable _r43 to RULE43.
+88    +    label  RULE43="SVG ==> ATM ==> HMEQLC                 ";
+89    +    rename _r44= RULE44;
+NOTE: Renaming variable _r44 to RULE44.
+90    +    label  RULE44="CKING ==> SVG ==> AUTO                 ";
+91    +    rename _r45= RULE45;
+NOTE: Renaming variable _r45 to RULE45.
+92    +    label  RULE45="CKING ==> SVG ==> IRA                  ";
+93    +    rename _r46= RULE46;
+NOTE: Renaming variable _r46 to RULE46.
+94    +    label  RULE46="CKING ==> CKING                        ";
+95    +    rename _r47= RULE47;
+NOTE: Renaming variable _r47 to RULE47.
+96    +    label  RULE47="SVG ==> HMEQLC ==> HMEQLC              ";
+97    +    rename _r48= RULE48;
+NOTE: Renaming variable _r48 to RULE48.
+98    +    label  RULE48="ATM ==> HMEQLC ==> HMEQLC              ";
+99    +    rename _r49= RULE49;
+NOTE: Renaming variable _r49 to RULE49.
+100   +    label  RULE49="CCRD ==> CKCRD                         ";
+101   +    rename _r50= RULE51;
+NOTE: Renaming variable _r50 to RULE51.
+102   +    label  RULE51="CKING ==> CCRD ==> CKCRD               ";
+103   +    rename _r51= RULE50;
+NOTE: Renaming variable _r51 to RULE50.
+104   +    label  RULE50="CCRD ==> CKCRD ==> CKCRD               ";
+105   +    rename _r52= RULE52;
+NOTE: Renaming variable _r52 to RULE52.
+106   +    label  RULE52="SVG ==> CD ==> ATM                     ";
+107   +    rename _r53= RULE53;
+NOTE: Renaming variable _r53 to RULE53.
+108   +    label  RULE53="MMDA ==> ATM                           ";
+109   +    rename _r54= RULE54;
+NOTE: Renaming variable _r54 to RULE54.
+110   +    label  RULE54="CCRD ==> CCRD                          ";
+111   +    rename _r55= RULE55;
+NOTE: Renaming variable _r55 to RULE55.
+112   +    label  RULE55="MTG ==> MTG                            ";
+113   +    rename _r56= RULE56;
+NOTE: Renaming variable _r56 to RULE56.
+114   +    label  RULE56="CKING ==> MMDA ==> ATM                 ";
+115   +    rename _r57= RULE57;
+NOTE: Renaming variable _r57 to RULE57.
+116   +    label  RULE57="CKING ==> MTG ==> MTG                  ";
+117   +    rename _r58= RULE58;
+NOTE: Renaming variable _r58 to RULE58.
+118   +    label  RULE58="MMDA ==> CD                            ";
+119   +    rename _r59= RULE59;
+NOTE: Renaming variable _r59 to RULE59.
+120   +    label  RULE59="ATM ==> CCRD                           ";
+121   +    rename _r60= RULE60;
+NOTE: Renaming variable _r60 to RULE60.
+122   +    label  RULE60="SVG ==> AUTO ==> AUTO                  ";
+123   +    rename _r61= RULE61;
+NOTE: Renaming variable _r61 to RULE61.
+124   +    label  RULE61="SVG ==> CD ==> CD                      ";
+125   +    rename _r62= RULE62;
+NOTE: Renaming variable _r62 to RULE62.
+126   +    label  RULE62="CKING ==> ATM ==> CCRD                 ";
+127   +    rename _r63= RULE63;
+NOTE: Renaming variable _r63 to RULE63.
+128   +    label  RULE63="SVG ==> MTG                            ";
+129   +    rename _r64= RULE64;
+NOTE: Renaming variable _r64 to RULE64.
+130   +    label  RULE64="CKING ==> CCRD ==> CCRD                ";
+131   +    rename _r65= RULE65;
+NOTE: Renaming variable _r65 to RULE65.
+132   +    label  RULE65="CKING ==> SVG ==> MTG                  ";
+133   +    rename _r66= RULE66;
+NOTE: Renaming variable _r66 to RULE66.
+134   +    label  RULE66="CKING ==> TRUST                        ";
+135   +    rename _r67= RULE67;
+NOTE: Renaming variable _r67 to RULE67.
+136   +    label  RULE67="CCRD ==> HMEQLC                        ";
+137   +    rename _r68= RULE68;
+NOTE: Renaming variable _r68 to RULE68.
+138   +    label  RULE68="CKING ==> CCRD ==> HMEQLC              ";
+139   +    rename _r69= RULE69;
+NOTE: Renaming variable _r69 to RULE69.
+140   +    label  RULE69="CKING ==> MMDA ==> CD                  ";
+141   +    rename _r70= RULE70;
+NOTE: Renaming variable _r70 to RULE70.
+142   +    label  RULE70="IRA ==> IRA                            ";
+143   +    rename _r71= RULE71;
+NOTE: Renaming variable _r71 to RULE71.
+144   +    label  RULE71="ATM ==> AUTO                           ";
+145   +    rename _r72= RULE72;
+NOTE: Renaming variable _r72 to RULE72.
+146   +    label  RULE72="ATM ==> AUTO ==> AUTO                  ";
+147   +    rename _r73= RULE73;
+NOTE: Renaming variable _r73 to RULE73.
+148   +    label  RULE73="CKING ==> ATM ==> AUTO                 ";
+149   +    rename _r74= RULE74;
+NOTE: Renaming variable _r74 to RULE74.
+150   +    label  RULE74="CD ==> CCRD                            ";
+151   +    rename _r75= RULE75;
+NOTE: Renaming variable _r75 to RULE75.
+152   +    label  RULE75="CKING ==> CD ==> CCRD                  ";
+153   +    rename _r76= RULE76;
+NOTE: Renaming variable _r76 to RULE76.
+154   +    label  RULE76="SVG ==> CCRD ==> CKCRD                 ";
+155   +    rename _r77= RULE77;
+NOTE: Renaming variable _r77 to RULE77.
+156   +    label  RULE77="TRUST ==> TRUST                        ";
+157   +    rename _r78= RULE78;
+NOTE: Renaming variable _r78 to RULE78.
+158   +    label  RULE78="ATM ==> MTG                            ";
+159   +    rename _r79= RULE79;
+NOTE: Renaming variable _r79 to RULE79.
+160   +    label  RULE79="CKING ==> ATM ==> MTG                  ";
+161   +    rename _r80= RULE80;
+NOTE: Renaming variable _r80 to RULE80.
+162   +    label  RULE80="CKING ==> TRUST ==> TRUST              ";
+163   +    rename _r81= RULE81;
+NOTE: Renaming variable _r81 to RULE81.
+164   +    label  RULE81="CD ==> IRA                             ";
+165   +    rename _r82= RULE82;
+NOTE: Renaming variable _r82 to RULE82.
+166   +    label  RULE82="CD ==> ATM ==> ATM                     ";
+167   +    rename _r83= RULE83;
+NOTE: Renaming variable _r83 to RULE83.
+168   +    label  RULE83="SVG ==> ATM ==> CCRD                   ";
+169   +    rename _r84= RULE84;
+NOTE: Renaming variable _r84 to RULE84.
+170   +    label  RULE84="MMDA ==> CCRD                          ";
+171   +    rename _r85= RULE85;
+NOTE: Renaming variable _r85 to RULE85.
+172   +    label  RULE85="HMEQLC ==> CKCRD                       ";
+173   +    rename _r86= RULE87;
+NOTE: Renaming variable _r86 to RULE87.
+174   +    label  RULE87="HMEQLC ==> CKCRD ==> CKCRD             ";
+175   +    rename _r87= RULE86;
+NOTE: Renaming variable _r87 to RULE86.
+176   +    label  RULE86="CKING ==> HMEQLC ==> CKCRD             ";
+177   +    rename _r88= RULE88;
+NOTE: Renaming variable _r88 to RULE88.
+178   +    label  RULE88="IRA ==> ATM                            ";
+179   +    rename _r89= RULE89;
+NOTE: Renaming variable _r89 to RULE89.
+180   +    label  RULE89="CKING ==> MMDA ==> CCRD                ";
+181   +    rename _r90= RULE90;
+NOTE: Renaming variable _r90 to RULE90.
+182   +    label  RULE90="CKING ==> IRA ==> ATM                  ";
+183   +    rename _r91= RULE91;
+NOTE: Renaming variable _r91 to RULE91.
+184   +    label  RULE91="SVG ==> CCRD ==> HMEQLC                ";
+185   +    rename _r92= RULE92;
+NOTE: Renaming variable _r92 to RULE92.
+186   +    label  RULE92="CKING ==> CD ==> IRA                   ";
+187   +    rename _r93= RULE93;
+NOTE: Renaming variable _r93 to RULE93.
+188   +    label  RULE93="SVG ==> ATM ==> AUTO                   ";
+189   +    rename _r94= RULE94;
+NOTE: Renaming variable _r94 to RULE94.
+190   +    label  RULE94="ATM ==> MTG ==> MTG                    ";
+191   +    rename _r95= RULE95;
+NOTE: Renaming variable _r95 to RULE95.
+192   +    label  RULE95="SVG ==> MTG ==> MTG                    ";
+193   +    rename _r96= RULE96;
+NOTE: Renaming variable _r96 to RULE96.
+194   +    label  RULE96="CD ==> TRUST                           ";
+195   +    rename _r97= RULE97;
+NOTE: Renaming variable _r97 to RULE97.
+196   +    label  RULE97="MMDA ==> ATM ==> ATM                   ";
+197   +    rename _r98= RULE98;
+NOTE: Renaming variable _r98 to RULE98.
+198   +    label  RULE98="SVG ==> CCRD ==> CCRD                  ";
+199   +    rename _r99= RULE99;
+NOTE: Renaming variable _r99 to RULE99.
+200   +    label  RULE99="SVG ==> TRUST                          ";
+201   +    rename _r100= RULE100;
+NOTE: Renaming variable _r100 to RULE100.
+202   +    label  RULE100="CKING ==> CD ==> TRUST                 ";
+203   +    rename _r101= RULE101;
+NOTE: Renaming variable _r101 to RULE101.
+204   +    label  RULE101="SVG ==> CD ==> CCRD                    ";
+205   +    rename _r102= RULE102;
+NOTE: Renaming variable _r102 to RULE102.
+206   +    label  RULE102="CKING ==> SVG ==> TRUST                ";
+207   +    rename _r103= RULE103;
+NOTE: Renaming variable _r103 to RULE103.
+208   +    label  RULE103="CD ==> HMEQLC                          ";
+209   +    rename _r104= RULE104;
+NOTE: Renaming variable _r104 to RULE104.
+210   +    label  RULE104="CKING ==> CD ==> HMEQLC                ";
+211   +    rename _r105= RULE105;
+NOTE: Renaming variable _r105 to RULE105.
+212   +    label  RULE105="MMDA ==> SVG ==> ATM                   ";
+213   +    rename _r106= RULE106;
+NOTE: Renaming variable _r106 to RULE106.
+214   +    label  RULE106="MMDA ==> HMEQLC                        ";
+215   +    rename _r107= RULE107;
+NOTE: Renaming variable _r107 to RULE107.
+216   +    label  RULE107="CKING ==> MMDA ==> HMEQLC              ";
+217   +    rename _r108= RULE108;
+NOTE: Renaming variable _r108 to RULE108.
+218   +    label  RULE108="MMDA ==> MMDA                          ";
+219   +    rename _r109= RULE109;
+NOTE: Renaming variable _r109 to RULE109.
+220   +    label  RULE109="CKING ==> IRA ==> IRA                  ";
+221   +    rename _r110= RULE110;
+NOTE: Renaming variable _r110 to RULE110.
+222   +    label  RULE110="MMDA ==> SVG ==> CD                    ";
+223   +    rename _r111= RULE111;
+NOTE: Renaming variable _r111 to RULE111.
+224   +    label  RULE111="MMDA ==> CKCRD                         ";
+225   +    rename _r112= RULE112;
+NOTE: Renaming variable _r112 to RULE112.
+226   +    label  RULE112="MMDA ==> CKCRD ==> CKCRD               ";
+227   +    rename _r113= RULE113;
+NOTE: Renaming variable _r113 to RULE113.
+228   +    label  RULE113="CKING ==> MMDA ==> CKCRD               ";
+229   +    rename _r114= RULE115;
+NOTE: Renaming variable _r114 to RULE115.
+230   +    label  RULE115="CD ==> CKCRD                           ";
+231   +    rename _r115= RULE114;
+NOTE: Renaming variable _r115 to RULE114.
+232   +    label  RULE114="HMEQLC ==> MTG                         ";
+233   +    rename _r116= RULE117;
+NOTE: Renaming variable _r116 to RULE117.
+234   +    label  RULE117="CKING ==> CD ==> CKCRD                 ";
+235   +    rename _r117= RULE116;
+NOTE: Renaming variable _r117 to RULE116.
+236   +    label  RULE116="CD ==> CKCRD ==> CKCRD                 ";
+237   +    rename _r118= RULE118;
+NOTE: Renaming variable _r118 to RULE118.
+238   +    label  RULE118="CKING ==> HMEQLC ==> MTG               ";
+239   +    rename _r119= RULE119;
+NOTE: Renaming variable _r119 to RULE119.
+240   +    label  RULE119="CD ==> AUTO                            ";
+241   +    rename _r120= RULE120;
+NOTE: Renaming variable _r120 to RULE120.
+242   +    label  RULE120="HMEQLC ==> AUTO                        ";
+243   +    rename _r121= RULE121;
+NOTE: Renaming variable _r121 to RULE121.
+244   +    label  RULE121="CKING ==> HMEQLC ==> AUTO              ";
+245   +    rename _r122= RULE122;
+NOTE: Renaming variable _r122 to RULE122.
+246   +    label  RULE122="CD ==> TRUST ==> TRUST                 ";
+247   +    rename _r123= RULE123;
+NOTE: Renaming variable _r123 to RULE123.
+248   +    label  RULE123="SVG ==> CD ==> IRA                     ";
+249   +    rename _r124= RULE124;
+NOTE: Renaming variable _r124 to RULE124.
+250   +    label  RULE124="MMDA ==> TRUST                         ";
+251   +    rename _r125= RULE125;
+NOTE: Renaming variable _r125 to RULE125.
+252   +    label  RULE125="SVG ==> ATM ==> MTG                    ";
+253   +    rename _r126= RULE126;
+NOTE: Renaming variable _r126 to RULE126.
+254   +    label  RULE126="SVG ==> HMEQLC ==> CKCRD               ";
+255   +    rename _r127= RULE128;
+NOTE: Renaming variable _r127 to RULE128.
+256   +    label  RULE128="CKING ==> CD ==> AUTO                  ";
+257   +    rename _r128= RULE127;
+NOTE: Renaming variable _r128 to RULE127.
+258   +    label  RULE127="CKING ==> MMDA ==> TRUST               ";
+259   +    rename _r129= RULE129;
+NOTE: Renaming variable _r129 to RULE129.
+260   +    label  RULE129="SVG ==> IRA ==> ATM                    ";
+261   +    rename _r130= RULE130;
+NOTE: Renaming variable _r130 to RULE130.
+262   +    label  RULE130="SVG ==> CD ==> TRUST                   ";
+263   +    rename _r131= RULE131;
+NOTE: Renaming variable _r131 to RULE131.
+264   +    label  RULE131="SVG ==> TRUST ==> TRUST                ";
+265   +    rename _r132= RULE132;
+NOTE: Renaming variable _r132 to RULE132.
+266   +    label  RULE132="CCRD ==> AUTO                          ";
+267   +    rename _r133= RULE133;
+NOTE: Renaming variable _r133 to RULE133.
+268   +    label  RULE133="CKING ==> CCRD ==> AUTO                ";
+269   +    rename _r134= RULE134;
+NOTE: Renaming variable _r134 to RULE134.
+270   +    label  RULE134="SVG ==> CD ==> HMEQLC                  ";
+271   +    rename _r135= RULE135;
+NOTE: Renaming variable _r135 to RULE135.
+272   +    label  RULE135="IRA ==> CCRD                           ";
+273   +    rename _r136= RULE136;
+NOTE: Renaming variable _r136 to RULE136.
+274   +    label  RULE136="MMDA ==> IRA                           ";
+275   +    rename _r137= RULE137;
+NOTE: Renaming variable _r137 to RULE137.
+276   +    label  RULE137="CD ==> AUTO ==> AUTO                   ";
+277   +    rename _r138= RULE138;
+NOTE: Renaming variable _r138 to RULE138.
+278   +    label  RULE138="CKING ==> IRA ==> CCRD                 ";
+279   +    rename _r139= RULE139;
+NOTE: Renaming variable _r139 to RULE139.
+280   +    label  RULE139="ATM ==> CCRD ==> CCRD                  ";
+281   +    rename _r140= RULE140;
+NOTE: Renaming variable _r140 to RULE140.
+282   +    label  RULE140="SVG ==> IRA ==> IRA                    ";
+283   +    rename _r141= RULE141;
+NOTE: Renaming variable _r141 to RULE141.
+284   +    label  RULE141="CCRD ==> HMEQLC ==> CKCRD              ";
+285   + run;
+ 
+NOTE: MODIFY was successful for EMWS4.ASSOC2_TRAIN.DATA.
+286   + quit;
+ 
+NOTE: PROCEDURE DATASETS used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.01 seconds
+ 
+ 
+11065  proc datasets lib=work nolist;
+11066  delete score_ruleid ruleid;
+11067  run;
+ 
+NOTE: Deleting WORK.SCORE_RULEID (memtype=DATA).
+NOTE: Deleting WORK.RULEID (memtype=DATA).
+11068  quit;
+ 
+NOTE: PROCEDURE DATASETS used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+ 
+ 
+11069  %let numtransrules = 0;
+11070  data WORK.RULEID;
+11071  set EMWS4.Assoc2_RULES(where=(transpose=1)) end=eof;
+11072  ruleid = _N_;
+11073  drop transpose;
+11074  if eof then call symput('numtransrules', strip(put(_N_, best.)));
+11075  run;
+ 
+NOTE: There were 141 observations read from the data set EMWS4.ASSOC2_RULES.
+      WHERE transpose=1;
+NOTE: The data set WORK.RULEID has 141 observations and 13 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+ 
+ 
+NOTE: This SAS session is using a registry in WORK.  All changes will be lost at the end of this session.
+11076  proc print data = EMWS4.Assoc2_RULES(drop=Transpose obs=25) noobs label;
+11077  title9 ' ';
+11078  title10 "%sysfunc(sasmsg(sashelp.dmine, rpt_sequence_title  , NOQUOTE))";
+11079  run;
+ 
+NOTE: There were 25 observations read from the data set EMWS4.ASSOC2_RULES.
+NOTE: The PROCEDURE PRINT printed page 2.
+NOTE: PROCEDURE PRINT used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+ 
+ 
+11080  proc means data=EMWS4.Assoc2_RULES min max mean;
+11081  var nitems count support conf;
+11082  title9 ' ';
+11083  title10 "%sysfunc(sasmsg(sashelp.dmine, rpt_ruleStatistics_title  , NOQUOTE))";
+11084  run;
+ 
+NOTE: There were 141 observations read from the data set EMWS4.ASSOC2_RULES.
+NOTE: The PROCEDURE MEANS printed page 3.
+NOTE: PROCEDURE MEANS used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+ 
+ 
+11085  proc freq data=EMWS4.Assoc2_RULES;
+11086  table nitems;
+11087  title9;
+11088  title10 "%sysfunc(sasmsg(sashelp.dmine, rpt_sequence_title  , NOQUOTE))";
+11089  run;
+ 
+NOTE: There were 141 observations read from the data set EMWS4.ASSOC2_RULES.
+NOTE: The PROCEDURE FREQ printed page 4.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+ 
+ 
+11090  title10;
+ 
+11091  data EMWS4.Assoc2_RULEMAP(keep=map rule);
+11092  length map $8;
+11093  label map = "%sysfunc(sasmsg(sashelp.dmine, rpt_map_vlabel,  NOQUOTE))";
+11094  set EMWS4.Assoc2_RULES;
+11095  map = "RULE"!!left(trim(put(_n_, 12.0)));
+11096  run;
+ 
+NOTE: There were 141 observations read from the data set EMWS4.ASSOC2_RULES.
+NOTE: The data set EMWS4.ASSOC2_RULEMAP has 141 observations and 2 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+ 
+ 
+*------------------------------------------------------------*
+* Score Log
+Date:                April 23, 2017
+Time:                02:06:42
+*------------------------------------------------------------*
+11198  *------------------------------------------------------------*;
+11199  * Assoc2: Scoring DATA data;
+11200  *------------------------------------------------------------*;
+11201  data EMWS4.Assoc2_TRANSACTION
+11202  / view=EMWS4.Assoc2_TRANSACTION
+11203  ;
+11204  set EMWS4.Ids_DATA
+11205  ;
+11206  run;
+ 
+NOTE: DATA STEP view saved on file EMWS4.ASSOC2_TRANSACTION.
+NOTE: A stored DATA STEP view cannot run under a different operating system.
+NOTE: View EMWS4.IDS_DATA.VIEW used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.03 seconds
+ 
+NOTE: DATA statement used (Total process time):
+      real time           0.06 seconds
+      cpu time            0.06 seconds
+ 
+ 
+11207  quit;
+ 
+11208  *------------------------------------------------------------*;
+11209  * Assoc2: Computing metadata for TRAIN data;
+11210  *------------------------------------------------------------*;
+ 
+11550  data EMWS4.Assoc2_EMINFO;
+11551  length TARGET KEY $32 DATA $43;
+11552  TARGET='';
+11553  KEY='ASSOCIATION';
+11554  DATA="Assoc2";
+11555  output;
+11556  run;
+ 
+NOTE: The data set EMWS4.ASSOC2_EMINFO has 1 observations and 3 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+ 
+ 
+11557  *------------------------------------------------------------*;
+11558  * Assoc2: Computing metadata for TRANSACTION data;
+11559  *------------------------------------------------------------*;
+ 
+NOTE: View EMWS4.ASSOC2_TRANSACTION.VIEW used (Total process time):
+      real time           0.06 seconds
+      cpu time            0.06 seconds
+ 
+11891  data EMWS4.Assoc2_EMINFO;
+11892  length TARGET KEY $32 DATA $43;
+11893  TARGET='';
+11894  KEY='ASSOCIATION';
+11895  DATA="Assoc2";
+11896  output;
+11897  run;
+ 
+NOTE: The data set EMWS4.ASSOC2_EMINFO has 1 observations and 3 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+ 
+ 
+11898  proc sort data = EMWS4.Ids_EMINFO OUT=WORK.SORTEDEMINFO NOTHREADS;
+11899  by TARGET KEY;
+11900  run;
+ 
+NOTE: There were 1 observations read from the data set EMWS4.IDS_EMINFO.
+NOTE: The data set WORK.SORTEDEMINFO has 1 observations and 3 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+ 
+ 
+11901  proc sort data = EMWS4.Assoc2_EMINFO OUT=WORK.TEMP_INFO NOTHREADS;
+11902  by TARGET KEY;
+11903  run;
+ 
+NOTE: There were 1 observations read from the data set EMWS4.ASSOC2_EMINFO.
+NOTE: The data set WORK.TEMP_INFO has 1 observations and 3 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+ 
+ 
+11904  data EMWS4.Assoc2_EMINFO;
+11905  merge WORK.SORTEDEMINFO WORK.TEMP_INFO;
+11906  by TARGET KEY;
+11907  run;
+ 
+NOTE: There were 1 observations read from the data set WORK.SORTEDEMINFO.
+NOTE: There were 1 observations read from the data set WORK.TEMP_INFO.
+NOTE: The data set EMWS4.ASSOC2_EMINFO has 2 observations and 3 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.01 seconds
+ 
+ 
+11908  proc datasets lib=work nolist;
+11909  delete TEMP_INFO SORTEDEMINFO;
+11910  run;
+ 
+NOTE: Deleting WORK.TEMP_INFO (memtype=DATA).
+NOTE: Deleting WORK.SORTEDEMINFO (memtype=DATA).
+11911  quit;
+ 
+NOTE: PROCEDURE DATASETS used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+ 
+ 
+NOTE: View EMWS4.ASSOC2_TRANSACTION.VIEW used (Total process time):
+      real time           0.06 seconds
+      cpu time            0.06 seconds
+ 
+*------------------------------------------------------------*
+* Report Log
+Date:                April 23, 2017
+Time:                02:06:43
+*------------------------------------------------------------*

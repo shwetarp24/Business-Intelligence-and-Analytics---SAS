@@ -1,0 +1,41 @@
+*------------------------------------------------------------*
+User:                pkumari1
+Date:                April 17, 2017
+Time:                01:22:19
+*------------------------------------------------------------*
+* Training Output
+*------------------------------------------------------------*
+ 
+ 
+ 
+ 
+Variable Summary
+ 
+            Measurement    Frequency
+Role           Level         Count
+ 
+INPUT        BINARY             2
+INPUT        INTERVAL          20
+INPUT        NOMINAL            3
+REJECTED     INTERVAL           1
+TARGET       BINARY             1
+
+
+*------------------------------------------------------------*
+* Score Output
+*------------------------------------------------------------*
+ 
+ 
+ 
+Formula Transformations
+(maximum 500 observations printed)
+ 
+                             Measurement
+ Variable Name      Role        Level           Formula
+ 
+GiftTimeLast_Rev    INPUT     INTERVAL      -1*GiftTimeLast
+
+
+*------------------------------------------------------------*
+* Report Output
+*------------------------------------------------------------*

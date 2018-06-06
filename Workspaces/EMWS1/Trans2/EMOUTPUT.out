@@ -1,0 +1,45 @@
+*------------------------------------------------------------*
+User:                pkumari1
+Date:                April 10, 2017
+Time:                14:28:48
+*------------------------------------------------------------*
+* Training Output
+*------------------------------------------------------------*
+ 
+ 
+ 
+ 
+Variable Summary
+ 
+            Measurement    Frequency
+Role           Level         Count
+ 
+INPUT        BINARY             3
+INPUT        INTERVAL          86
+INPUT        NOMINAL            1
+REJECTED     INTERVAL           3
+REJECTED     NOMINAL            2
+TARGET       BINARY             1
+TARGET       INTERVAL           1
+ 
+ 
+ 
+Computed Transformations
+(maximum 500 observations printed)
+ 
+                         Input
+Input Name     Role      Level            Name           Level       Formula
+ 
+DAYLAST_REV    INPUT    INTERVAL    PCTL_DAYLAST_REV    NOMINAL    Quantile(5)
+DOLL24         INPUT    INTERVAL    PCTL_DOLL24         NOMINAL    Quantile(5)
+FREQPRCH       INPUT    INTERVAL    PCTL_FREQPRCH       NOMINAL    Quantile(5)
+
+
+*------------------------------------------------------------*
+* Score Output
+*------------------------------------------------------------*
+
+
+*------------------------------------------------------------*
+* Report Output
+*------------------------------------------------------------*

@@ -1,0 +1,43 @@
+*------------------------------------------------------------*
+User:                pkumari1
+Date:                April 10, 2017
+Time:                14:40:42
+*------------------------------------------------------------*
+* Training Output
+*------------------------------------------------------------*
+ 
+ 
+ 
+ 
+Variable Summary
+ 
+            Measurement    Frequency
+Role           Level         Count
+ 
+INPUT        BINARY             3
+INPUT        INTERVAL          83
+INPUT        NOMINAL            4
+REJECTED     INTERVAL           3
+REJECTED     NOMINAL            2
+TARGET       BINARY             1
+TARGET       INTERVAL           1
+
+
+*------------------------------------------------------------*
+* Score Output
+*------------------------------------------------------------*
+ 
+ 
+ 
+Formula Transformations
+(maximum 500 observations printed)
+ 
+Variable             Measurement
+  Name      Role        Level                                           Formula
+ 
+  RFM       INPUT     INTERVAL      substr(pctl_daylast_rev,1,2)||substr(pctl_freqprch,1,2)||substr(pctl_doll24,1,2)
+
+
+*------------------------------------------------------------*
+* Report Output
+*------------------------------------------------------------*

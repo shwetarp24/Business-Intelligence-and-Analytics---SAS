@@ -1,0 +1,1959 @@
+*------------------------------------------------------------*
+* Score Log
+Date:                April 20, 2017
+Time:                01:21:23
+*------------------------------------------------------------*
+16662  %let EMEXCEPTIONSTRING=;
+16663  *------------------------------------------------------------*;
+16664  * SCORE: Tree2;
+16665  *------------------------------------------------------------*;
+16666  %let EM_ACTION = SCORE;
+16667  %let syscc = 0;
+16668  %macro main;
+16669  
+16670    %if %upcase(&EM_ACTION) = CREATE %then %do;
+16671      filename temp catalog 'sashelp.emmodl.tree_create.source';
+16672      %include temp;
+16673      filename temp;
+16674  
+16675      %em_tree_create;
+16676    %end;
+16677  
+16678     %else
+16679     %if %upcase(&EM_ACTION) = TRAIN %then %do;
+16680  
+16681         filename temp catalog 'sashelp.emmodl.tree_train.source';
+16682         %include temp;
+16683         filename temp;
+16684         %em_tree_train;
+16685     %end;
+16686  
+16687    %else
+16688    %if %upcase(&EM_ACTION) = SCORE %then %do;
+16689      filename temp catalog 'sashelp.emmodl.tree_score.source';
+16690      %include temp;
+16691      filename temp;
+16692  
+16693      %em_tree_score;
+16694  
+16695    %end;
+16696  
+16697    %else
+16698    %if %upcase(&EM_ACTION) = REPORT %then %do;
+16699  
+16700         filename temp catalog 'sashelp.emmodl.tree_report.source';
+16701         %include temp;
+16702         filename temp;
+16703  
+16704         %em_tree_report;
+16705     %end;
+16706  
+16707    %else
+16708    %if %upcase(&EM_ACTION) = OPENINT %then %do;
+16709  
+16710         filename temp catalog 'sashelp.emmodl.tree_actions.source';
+16711         %include temp;
+16712         filename temp;
+16713         %EM_TREE_OPENTREEVIEWER;
+16714  
+16715     %end;
+16716  
+16717    %else
+16718    %if %upcase(&EM_ACTION) = CLOSEINT %then %do;
+16719  
+16720         filename temp catalog 'sashelp.emmodl.tree_actions.source';
+16721         %include temp;
+16722         filename temp;
+16723         %EM_TREE_CLOSETREEVIEWER;
+16724  
+16725     %end;
+16726  
+16727  
+16728     %doendm:
+16729  %mend main;
+16730  
+16731  %main;
+NOTE: %INCLUDE (level 1) file TEMP is file SASHELP.EMMODL.TREE_SCORE.SOURCE.
+16733 +%macro em_tree_score;
+16735 +   /* determine if multiple targets will be processed */
+16736 +   %let em_tree_multipleTargets=N;
+16737 +   %let em_tree_numTarget=1;
+16738 +   %if "&EM_PROPERTY_USEMULTIPLETARGET" eq "Y" %then %do;
+16739 +      /* determine if there are any ordinal target variables - if so, multiple targets are not supported */
+16740 +      %if &EM_NUM_ORDINAL_TARGET gt 0 %then %do;
+16741 +         %let em_tree_multipleTargets=N;
+16742 +      %end;
+16743 +      %else %do;
+16744 +         /* create macro array of targets  */
+16745 +         data _null_;
+16746 +           set &EM_DATA_VARIABLESET(where=(ROLE='TARGET' AND LEVEL^='ORDINAL')) end=eof;
+16747 +           call symput('em_tree_targetVars'!!strip(put(_N_, BEST.)), strip(Name));
+16748 +           if eof then
+16749 +             call symput('em_tree_numTarget', strip(put(_N_, BEST.)));
+16750 +        run;
+16752 +        %if &em_tree_numTarget gt 1 %then %do;
+16753 +           %let em_tree_multipleTargets=Y;
+16754 +        %end;
+16755 +      %end;
+16756 +   %end;
+16758 +   /* build flow and publish scoring code */
+16759 +   %EM_GETNAME(key=TREEFLOW, type=FILE, extension=sas);
+16760 +   %EM_GETNAME(key=TREEPUBLISH, type=FILE, extension=sas);
+16762 +   filename treeflow "&EM_USER_TREEFLOW";
+16763 +   filename treepub "&EM_USER_TREEPUBLISH";
+16765 +   filename flowref  "&EM_FILE_EMFLOWSCORECODE";
+16766 +   filename pubref   "&EM_FILE_EMPUBLISHSCORECODE";
+16768 +   %em_copyfile(infref=treeflow, outfref=flowref);
+16769 +   %em_copyfile(infref=treepub, outfref=pubref);
+16771 +   filename treeflow;
+16772 +   filename treepub;
+16774 +   /* if priors are used, add code to generate unadjusted residuals in export */
+16775 +   %let useAdjPriors = N;
+16776 +   data _null_;
+16777 +     set &EM_DEC_DECMETA(where=(_TYPE_="DECPRIOR"));
+16778 +     if USE="Y" then call symput('useAdjPriors', 'Y');
+16779 +   run;
+16780 +   %if (("&em_tree_multipleTargets" eq "N") AND ("&useAdjPriors" eq "Y")) %then %do;
+16781 +      filename temp catalog 'sashelp.emutil.em_makeunadjustedresidualvars.source';
+16782 +      %include temp;
+16783 +      filename temp;
+16785 +      %EM_GETNAME(key=adjResidualCode, type=FILE, extension=sas);
+16786 +      filename adjref "&EM_USER_adjResidualCode";
+16787 +      %makeUnadjustedResidualVars(target=%EM_TARGET, decmeta=&EM_DEC_DECMETA, fref=adjref);
+16789 +      %em_copyfile(infref=adjref, outfref=flowref, append=Y);
+16791 +      filename adjref;
+16792 +   %end;
+16794 +   /* LEAF */
+16795 +   %if "&EM_PROPERTY_LEAFID" eq "Y" %then %do;
+16796 +      data _null_;
+16797 +        file flowref mod;
+16798 +        put 'drop _LEAF_;';
+16799 +      run;
+16801 +      data _null_;
+16802 +        file pubref mod;
+16803 +        put 'drop _LEAF_;';
+16804 +      run;
+16806 +   %end;
+16808 +   filename flowref;
+16809 +   filename pubref;
+16811 +   /* em_metachange code */
+16812 +   %if "&EM_PROPERTY_LEAFID" eq "Y" %then %do;
+16813 +     %EM_METACHANGE(name=_NODE_, role=&EM_PROPERTY_NODEROLE, LEVEL=NOMINAL);
+16814 +   %end;
+16816 +   /* variable selection based on importance stat    */
+16817 +   %if "&EM_PROPERTY_VARSELECTION" eq "Y" %then %do;
+16818 +     %EM_GETNAME(key=OUTIMPORT, type=DATA);
+16819 +     %let dsid = %sysfunc(open(&EM_USER_OUTIMPORT(where=(IMPORTANCE<0.05))));
+16820 +     %let varnum = %sysfunc(varnum(&dsid, NAME));
+16821 +     %let obs = %sysfunc(fetch(&dsid));
+16822 +     %do %while(&obs=0);
+16823 +       %let temp = %nrbquote(%sysfunc(getvarc(&dsid, &varnum)));
+16824 +       %let varname = %nrbquote(%sysfunc(tranwrd(&temp,  %str(%"),"")));
+16825 +       %EM_METACHANGE(name=&varname, role=REJECTED);
+16826 +       %let obs = %sysfunc(fetch(&dsid));
+16827 +     %end;
+16828 +     %if &dsid %then %let dsid=%sysfunc(close(&dsid));
+16829 +   %end;
+16831 +   /* set Q_ varaibles to role of ASSESS when in the presense of prior probabilities */
+16832 +   %if %sysfunc(exist(&EM_DEC_DECMETA)) %then %do;
+16833 +    %let tree_pred_vars = ;
+16834 +    %let tree_pred_lvl =;
+16835 +    %let numpred= 0;
+16837 +    data _null_;
+16838 +     set &EM_DEC_DECMETA(where=(_TYPE_="PREDICTED")) end=eof;
+16839 +     call symput('tree_pred_vars'!!strip(put(_N_, BEST.)), strip(VARIABLE));
+16840 +     call symput('tree_pred_lvl'!!strip(put(_N_, BEST.)), strip(LEVEL));
+16841 +     if eof then
+16842 +       call symput('numpred', strip(put(_N_, BEST.)));
+16843 +    run;
+16844 +   %end;
+16846 +   %if &numpred ne 0 %then %do;
+16847 +    %do i=1 %to &numpred;
+16848 +      %let qpred = Q%substr(&&tree_pred_vars&i,2);
+16849 +      %EM_METACHANGE(name=&qpred, role=ASSESS);
+16850 +    %end;
+16851 +   %end;
+16853 +   /* determine if multiple targets will be processed */
+16854 +   %let em_tree_multipleTargets=N;
+16855 +   %let em_tree_numTarget=1;
+16856 +   %if "&EM_PROPERTY_USEMULTIPLETARGET" eq "Y" %then %do;
+16857 +      /* determine if there are any ordinal target variables - if so, multiple targets are not supported */
+16858 +      %if &EM_NUM_ORDINAL_TARGET gt 0 %then %do;
+16859 +         %let em_tree_multipleTargets=N;
+16860 +      %end;
+16861 +      %else %do;
+16862 +        data _null_;
+16863 +          set &EM_DATA_VARIABLESET(where=(ROLE='TARGET' AND LEVEL^='ORDINAL')) end=eof;
+16864 +          if eof then
+16865 +            call symput('em_tree_numTarget', strip(put(_N_, BEST.)));
+16866 +        run;
+16868 +        %if &em_tree_numTarget gt 1 %then %do;
+16869 +           %let em_tree_multipleTargets=Y;
+16870 +        %end;
+16871 +     %end;
+16872 +   %end;
+16874 +   /* need to include this code to do the %em_report for OUTIMPORT here instead of in Report code so _loop data set is created when group processing */
+16875 +   %if "&em_tree_multipleTargets" eq "N" %then %do;
+16877 +      /* variable importance */
+16878 +      %EM_GETNAME(key=OUTIMPORT, type=DATA);
+16879 +      %if %sysfunc(exist(&EM_USER_OUTIMPORT)) eq 1 %then %do;
+16881 +         %let validexist=0;
+16882 +         %if (("&EM_IMPORT_VALIDATE" ne "") AND (%sysfunc(exist(&EM_IMPORT_VALIDATE)) or %sysfunc(exist(&EM_IMPORT_VALIDATE,VIEW)))) %then %do;
+16883 +           %let validexist=1;
+16884 +         %end;
+16886 +         /* determine if vars exists - properties could indicate they are they but freeze=Y would mean the node wasn't retrained */
+16887 +         /* and the columns may not be generated                                                                                 */
+16888 +         %let em_tree_cvexists=;
+16889 +         %let em_tree_surrexists=.;
+16890 +         data _null_;
+16891 +            set &EM_USER_OUTIMPORT (obs=2) end=eof;
+16892 +            if eof then do ;
+16893 +               call symput("em_tree_cvexists" , strip(put(cvimportance,best.))) ;
+16894 +               call symput("em_tree_surrexists", strip(put(nsurrogates, best.)));
+16895 +            end;
+16896 +         run;
+16898 +         data &EM_USER_OUTIMPORT;
+16899 +            set &EM_USER_OUTIMPORT;
+16901 +            /* format columns based on Precison value specified */
+16902 +            format importance 15.&EM_PROPERTY_PRECISION
+16903 +                 %if &validexist %then %do;
+16904 +                   vimportance ratio 15.&EM_PROPERTY_PRECISION
+16905 +                 %end;
+16906 +                 %if "&EM_TREE_CVEXISTS" ne "." %then %do;
+16907 +                   cvimportance vimportance ratio 15.&EM_PROPERTY_PRECISION
+16908 +                 %end;
+16909 +            ;
+16910 +            label  NAME       = "%sysfunc(sasmsg(sashelp.dmine, meta_name_vlabel, noquote))"
+16911 +                 LABEL        = "%sysfunc(sasmsg(sashelp.dmine, meta_label_vlabel, noquote))"
+16912 +                 NRULES       = "%sysfunc(sasmsg(sashelp.dmine, rpt_nrules_vlabel, noquote))"
+16913 +                 IMPORTANCE   = "%sysfunc(sasmsg(sashelp.dmine, rpt_importance_vlabel, noquote))"
+16914 +                 %if "&em_tree_surrexists" ne "" %then %do;
+16915 +                   NSURROGATES  = "%sysfunc(sasmsg(sashelp.dmine, rpt_nsurrogates_vlabel, noquote))"
+16916 +                 %end;
+16917 +                 %if &validexist %then %do;
+16918 +                   VIMPORTANCE = "%sysfunc(sasmsg(sashelp.dmine, rpt_vimportance_vlabel, noquote))"
+16919 +                   RATIO       = "%sysfunc(sasmsg(sashelp.dmine, rpt_ratio_vlabel, noquote))"
+16920 +                 %end;
+16921 +                 %if "&EM_TREE_CVEXISTS" ne "" %then %do;
+16922 +                   VIMPORTANCE = "%sysfunc(sasmsg(sashelp.dmine, rpt_vimportance_vlabel, noquote))"
+16923 +                   CVIMPORTANCE =  "%sysfunc(sasmsg(sashelp.dmine, rpt_cvimport_vlabel, noquote))"
+16924 +                   CVRULES= "%sysfunc(sasmsg(sashelp.dmine, rpt_cvrules_vlabel, noquote))"
+16925 +                   RATIO = "%sysfunc(sasmsg(sashelp.dmine, rpt_ratio_vlabel, noquote))"
+16926 +                 %end;
+16927 +            ;
+16928 +         run;
+16930 +         %EM_REPORT(key=OUTIMPORT, viewtype=DATA, block=MODEL, description=IMPORTANCE, autodisplay=N);
+16931 +      %end;
+16932 +   %end;
+16934 +   %doendm:
+16935 +%mend em_tree_score;
+NOTE: %INCLUDE (level 1) ending.
+NOTE: Fileref TEMP has been deassigned.
+
+NOTE: The file FLOWREF is:
+      Filename=H:\Bia_Priya\Project_PredictiveAnalysis\Workspaces\EMWS2\Tree2\EMFLOWSCORE.sas,
+      RECFM=V,LRECL=20000,File Size (bytes)=0,
+      Last Modified=20Apr2017:01:21:22,
+      Create Time=20Apr2017:01:21:22
+
+NOTE: 170 records were written to the file FLOWREF.
+      The minimum record length was 1.
+      The maximum record length was 65.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: The file PUBREF is:
+      Filename=H:\Bia_Priya\Project_PredictiveAnalysis\Workspaces\EMWS2\Tree2\EMPUBLISHSCORE.sas,
+      RECFM=V,LRECL=20000,File Size (bytes)=0,
+      Last Modified=20Apr2017:01:21:22,
+      Create Time=20Apr2017:01:21:22
+
+NOTE: 148 records were written to the file PUBREF.
+      The minimum record length was 1.
+      The maximum record length was 65.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+      
+
+NOTE: Fileref TREEFLOW has been deassigned.
+NOTE: Fileref TREEPUB has been deassigned.
+
+NOTE: There were 1 observations read from the data set EMWS2.IDS_RESPOND_DM.
+      WHERE _TYPE_='DECPRIOR';
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: The file FLOWREF is:
+      Filename=H:\Bia_Priya\Project_PredictiveAnalysis\Workspaces\EMWS2\Tree2\EMFLOWSCORE.sas,
+      RECFM=V,LRECL=32767,File Size (bytes)=5983,
+      Last Modified=20Apr2017:01:21:22,
+      Create Time=20Apr2017:01:21:22
+
+NOTE: 1 record was written to the file FLOWREF.
+      The minimum record length was 12.
+      The maximum record length was 12.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: The file PUBREF is:
+      Filename=H:\Bia_Priya\Project_PredictiveAnalysis\Workspaces\EMWS2\Tree2\EMPUBLISHSCORE.sas,
+      RECFM=V,LRECL=32767,File Size (bytes)=5354,
+      Last Modified=20Apr2017:01:21:22,
+      Create Time=20Apr2017:01:21:22
+
+NOTE: 1 record was written to the file PUBREF.
+      The minimum record length was 12.
+      The maximum record length was 12.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+NOTE: Fileref FLOWREF has been deassigned.
+NOTE: Fileref PUBREF has been deassigned.
+
+NOTE: The data set WORK.EM_METACHANGE has 1 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 1 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 2 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 2 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 3 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 3 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 4 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 4 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 5 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 5 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 6 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 6 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 7 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 7 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 8 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 8 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 9 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 9 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 10 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 10 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 11 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 11 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 12 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 12 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 13 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 13 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 14 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 14 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 15 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 15 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 16 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 16 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 17 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 17 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 18 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 18 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 19 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 19 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 20 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 20 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 21 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 21 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 22 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 22 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 23 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 23 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 24 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 24 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 25 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 25 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 26 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 26 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 27 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 27 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 28 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 28 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 29 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 29 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 30 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 30 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 31 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 31 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 32 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 32 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 33 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 33 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 34 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 34 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 35 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 35 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 36 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 36 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 37 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 37 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 38 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 38 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 39 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 39 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 40 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 40 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 41 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 41 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 42 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 42 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 43 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 43 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 44 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 44 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 45 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 45 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 46 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 46 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 47 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 47 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 48 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 48 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 49 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 49 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 50 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 50 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 51 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 51 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 52 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 52 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 53 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 53 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 54 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 54 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 55 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 55 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 56 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 56 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 57 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 57 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 58 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 58 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 59 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 59 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 60 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 60 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 61 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 61 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 62 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 62 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 63 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 63 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 64 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 64 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 65 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 65 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 66 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 66 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 67 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 67 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 68 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 68 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 69 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 69 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 70 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 70 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 71 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 71 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 72 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 72 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 73 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 73 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 74 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 74 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 75 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 75 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 76 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 76 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 77 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 77 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 78 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 78 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 79 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 79 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 80 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 80 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 81 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 81 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 82 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 82 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 83 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 83 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 84 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 84 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 85 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 2 observations read from the data set EMWS2.IDS_RESPOND_DM.
+      WHERE _TYPE_='PREDICTED';
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: There were 85 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 86 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: There were 86 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 87 observations and 9 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+
+NOTE: Variable cvimportance is uninitialized.
+NOTE: Variable nsurrogates is uninitialized.
+NOTE: There were 2 observations read from the data set EMWS2.TREE2_OUTIMPORT.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: Variable NSURROGATES is uninitialized.
+NOTE: Variable CVIMPORTANCE is uninitialized.
+NOTE: Variable CVRULES is uninitialized.
+NOTE: There were 90 observations read from the data set EMWS2.TREE2_OUTIMPORT.
+NOTE: The data set EMWS2.TREE2_OUTIMPORT has 90 observations and 6 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.04 seconds
+      cpu time            0.01 seconds
+      
+
+
+NOTE: The data set WORK.EM_USER_REPORT has 132 observations and 4 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.03 seconds
+      
+
+16936  
+16937  *------------------------------------------------------------*;
+16938  * End SCORE: Tree2;
+16939  *------------------------------------------------------------*;
+
+16940  proc sort data=WORK.EM_METACHANGE;
+16941  by key uname;
+16942  run;
+
+NOTE: There were 87 observations read from the data set WORK.EM_METACHANGE.
+NOTE: The data set WORK.EM_METACHANGE has 87 observations and 9 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+16943  filename x "H:\Bia_Priya\Project_PredictiveAnalysis\Workspaces\EMWS2\Tree2\CDELTA_TRAIN.sas";
+16944  data _null_;
+16945  file x;
+16946  put 'if upcase(NAME) = "BOTHPAYM" then do;';
+16947  put 'ROLE = "REJECTED";';
+16948  put 'end;';
+16949  put 'else ';
+16950  put 'if upcase(NAME) = "BUYPROP" then do;';
+16951  put 'ROLE = "REJECTED";';
+16952  put 'end;';
+16953  put 'else ';
+16954  put 'if upcase(NAME) = "CATALOGCNT" then do;';
+16955  put 'ROLE = "REJECTED";';
+16956  put 'end;';
+16957  put 'else ';
+16958  put 'if upcase(NAME) = "CCPAYM" then do;';
+16959  put 'ROLE = "REJECTED";';
+16960  put 'end;';
+16961  put 'else ';
+16962  put 'if upcase(NAME) = "DEPT01" then do;';
+16963  put 'ROLE = "REJECTED";';
+16964  put 'end;';
+16965  put 'else ';
+16966  put 'if upcase(NAME) = "DEPT02" then do;';
+16967  put 'ROLE = "REJECTED";';
+16968  put 'end;';
+16969  put 'else ';
+16970  put 'if upcase(NAME) = "DEPT03" then do;';
+16971  put 'ROLE = "REJECTED";';
+16972  put 'end;';
+16973  put 'else ';
+16974  put 'if upcase(NAME) = "DEPT04" then do;';
+16975  put 'ROLE = "REJECTED";';
+16976  put 'end;';
+16977  put 'else ';
+16978  put 'if upcase(NAME) = "DEPT05" then do;';
+16979  put 'ROLE = "REJECTED";';
+16980  put 'end;';
+16981  put 'else ';
+16982  put 'if upcase(NAME) = "DEPT06" then do;';
+16983  put 'ROLE = "REJECTED";';
+16984  put 'end;';
+16985  put 'else ';
+16986  put 'if upcase(NAME) = "DEPT07" then do;';
+16987  put 'ROLE = "REJECTED";';
+16988  put 'end;';
+16989  put 'else ';
+16990  put 'if upcase(NAME) = "DEPT08" then do;';
+16991  put 'ROLE = "REJECTED";';
+16992  put 'end;';
+16993  put 'else ';
+16994  put 'if upcase(NAME) = "DEPT09" then do;';
+16995  put 'ROLE = "REJECTED";';
+16996  put 'end;';
+16997  put 'else ';
+16998  put 'if upcase(NAME) = "DEPT10" then do;';
+16999  put 'ROLE = "REJECTED";';
+17000  put 'end;';
+17001  put 'else ';
+17002  put 'if upcase(NAME) = "DEPT11" then do;';
+17003  put 'ROLE = "REJECTED";';
+17004  put 'end;';
+17005  put 'else ';
+17006  put 'if upcase(NAME) = "DEPT12" then do;';
+17007  put 'ROLE = "REJECTED";';
+17008  put 'end;';
+17009  put 'else ';
+17010  put 'if upcase(NAME) = "DEPT13" then do;';
+17011  put 'ROLE = "REJECTED";';
+17012  put 'end;';
+17013  put 'else ';
+17014  put 'if upcase(NAME) = "DEPT14" then do;';
+17015  put 'ROLE = "REJECTED";';
+17016  put 'end;';
+17017  put 'else ';
+17018  put 'if upcase(NAME) = "DEPT15" then do;';
+17019  put 'ROLE = "REJECTED";';
+17020  put 'end;';
+17021  put 'else ';
+17022  put 'if upcase(NAME) = "DEPT16" then do;';
+17023  put 'ROLE = "REJECTED";';
+17024  put 'end;';
+17025  put 'else ';
+17026  put 'if upcase(NAME) = "DEPT17" then do;';
+17027  put 'ROLE = "REJECTED";';
+17028  put 'end;';
+17029  put 'else ';
+17030  put 'if upcase(NAME) = "DEPT18" then do;';
+17031  put 'ROLE = "REJECTED";';
+17032  put 'end;';
+17033  put 'else ';
+17034  put 'if upcase(NAME) = "DEPT19" then do;';
+17035  put 'ROLE = "REJECTED";';
+17036  put 'end;';
+17037  put 'else ';
+17038  put 'if upcase(NAME) = "DEPT20" then do;';
+17039  put 'ROLE = "REJECTED";';
+17040  put 'end;';
+17041  put 'else ';
+17042  put 'if upcase(NAME) = "DEPT21" then do;';
+17043  put 'ROLE = "REJECTED";';
+17044  put 'end;';
+17045  put 'else ';
+17046  put 'if upcase(NAME) = "DEPT22" then do;';
+17047  put 'ROLE = "REJECTED";';
+17048  put 'end;';
+17049  put 'else ';
+17050  put 'if upcase(NAME) = "DEPT23" then do;';
+17051  put 'ROLE = "REJECTED";';
+17052  put 'end;';
+17053  put 'else ';
+17054  put 'if upcase(NAME) = "DEPT24" then do;';
+17055  put 'ROLE = "REJECTED";';
+17056  put 'end;';
+17057  put 'else ';
+17058  put 'if upcase(NAME) = "DEPT26" then do;';
+17059  put 'ROLE = "REJECTED";';
+17060  put 'end;';
+17061  put 'else ';
+17062  put 'if upcase(NAME) = "DEPT27" then do;';
+17063  put 'ROLE = "REJECTED";';
+17064  put 'end;';
+17065  put 'else ';
+17066  put 'if upcase(NAME) = "DOLINDEA" then do;';
+17067  put 'ROLE = "REJECTED";';
+17068  put 'end;';
+17069  put 'else ';
+17070  put 'if upcase(NAME) = "DOLINDET" then do;';
+17071  put 'ROLE = "REJECTED";';
+17072  put 'end;';
+17073  put 'else ';
+17074  put 'if upcase(NAME) = "DOLLARQ01" then do;';
+17075  put 'ROLE = "REJECTED";';
+17076  put 'end;';
+17077  put 'else ';
+17078  put 'if upcase(NAME) = "DOLLARQ02" then do;';
+17079  put 'ROLE = "REJECTED";';
+17080  put 'end;';
+17081  put 'else ';
+17082  put 'if upcase(NAME) = "DOLLARQ03" then do;';
+17083  put 'ROLE = "REJECTED";';
+17084  put 'end;';
+17085  put 'else ';
+17086  put 'if upcase(NAME) = "DOLLARQ04" then do;';
+17087  put 'ROLE = "REJECTED";';
+17088  put 'end;';
+17089  put 'else ';
+17090  put 'if upcase(NAME) = "DOLLARQ05" then do;';
+17091  put 'ROLE = "REJECTED";';
+17092  put 'end;';
+17093  put 'else ';
+17094  put 'if upcase(NAME) = "DOLLARQ06" then do;';
+17095  put 'ROLE = "REJECTED";';
+17096  put 'end;';
+17097  put 'else ';
+17098  put 'if upcase(NAME) = "DOLLARQ07" then do;';
+17099  put 'ROLE = "REJECTED";';
+17100  put 'end;';
+17101  put 'else ';
+17102  put 'if upcase(NAME) = "DOLLARQ08" then do;';
+17103  put 'ROLE = "REJECTED";';
+17104  put 'end;';
+17105  put 'else ';
+17106  put 'if upcase(NAME) = "DOLLARQ09" then do;';
+17107  put 'ROLE = "REJECTED";';
+17108  put 'end;';
+17109  put 'else ';
+17110  put 'if upcase(NAME) = "DOLLARQ10" then do;';
+17111  put 'ROLE = "REJECTED";';
+17112  put 'end;';
+17113  put 'else ';
+17114  put 'if upcase(NAME) = "DOLLARQ11" then do;';
+17115  put 'ROLE = "REJECTED";';
+17116  put 'end;';
+17117  put 'else ';
+17118  put 'if upcase(NAME) = "DOLLARQ12" then do;';
+17119  put 'ROLE = "REJECTED";';
+17120  put 'end;';
+17121  put 'else ';
+17122  put 'if upcase(NAME) = "DOLLARQ13" then do;';
+17123  put 'ROLE = "REJECTED";';
+17124  put 'end;';
+17125  put 'else ';
+17126  put 'if upcase(NAME) = "DOLLARQ14" then do;';
+17127  put 'ROLE = "REJECTED";';
+17128  put 'end;';
+17129  put 'else ';
+17130  put 'if upcase(NAME) = "DOLLARQ15" then do;';
+17131  put 'ROLE = "REJECTED";';
+17132  put 'end;';
+17133  put 'else ';
+17134  put 'if upcase(NAME) = "DOLLARQ16" then do;';
+17135  put 'ROLE = "REJECTED";';
+17136  put 'end;';
+17137  put 'else ';
+17138  put 'if upcase(NAME) = "DOLLARQ17" then do;';
+17139  put 'ROLE = "REJECTED";';
+17140  put 'end;';
+17141  put 'else ';
+17142  put 'if upcase(NAME) = "DOLLARQ18" then do;';
+17143  put 'ROLE = "REJECTED";';
+17144  put 'end;';
+17145  put 'else ';
+17146  put 'if upcase(NAME) = "DOLLARQ19" then do;';
+17147  put 'ROLE = "REJECTED";';
+17148  put 'end;';
+17149  put 'else ';
+17150  put 'if upcase(NAME) = "DOLLARQ20" then do;';
+17151  put 'ROLE = "REJECTED";';
+17152  put 'end;';
+17153  put 'else ';
+17154  put 'if upcase(NAME) = "DOLLARQ21" then do;';
+17155  put 'ROLE = "REJECTED";';
+17156  put 'end;';
+17157  put 'else ';
+17158  put 'if upcase(NAME) = "DOLLARQ22" then do;';
+17159  put 'ROLE = "REJECTED";';
+17160  put 'end;';
+17161  put 'else ';
+17162  put 'if upcase(NAME) = "DOLNETDA" then do;';
+17163  put 'ROLE = "REJECTED";';
+17164  put 'end;';
+17165  put 'else ';
+17166  put 'if upcase(NAME) = "DOLNETDT" then do;';
+17167  put 'ROLE = "REJECTED";';
+17168  put 'end;';
+17169  put 'else ';
+17170  put 'if upcase(NAME) = "METHPAYM" then do;';
+17171  put 'ROLE = "REJECTED";';
+17172  put 'end;';
+17173  put 'else ';
+17174  put 'if upcase(NAME) = "MONLAST" then do;';
+17175  put 'ROLE = "REJECTED";';
+17176  put 'end;';
+17177  put 'else ';
+17178  put 'if upcase(NAME) = "PCPAYM" then do;';
+17179  put 'ROLE = "REJECTED";';
+17180  put 'end;';
+17181  put 'else ';
+17182  put 'if upcase(NAME) = "Q_RESPOND0" then do;';
+17183  put 'ROLE = "ASSESS";';
+17184  put 'end;';
+17185  put 'else ';
+17186  put 'if upcase(NAME) = "Q_RESPOND1" then do;';
+17187  put 'ROLE = "ASSESS";';
+17188  put 'end;';
+17189  put 'else ';
+17190  put 'if upcase(NAME) = "TOTORDQ01" then do;';
+17191  put 'ROLE = "REJECTED";';
+17192  put 'end;';
+17193  put 'else ';
+17194  put 'if upcase(NAME) = "TOTORDQ02" then do;';
+17195  put 'ROLE = "REJECTED";';
+17196  put 'end;';
+17197  put 'else ';
+17198  put 'if upcase(NAME) = "TOTORDQ03" then do;';
+17199  put 'ROLE = "REJECTED";';
+17200  put 'end;';
+17201  put 'else ';
+17202  put 'if upcase(NAME) = "TOTORDQ04" then do;';
+17203  put 'ROLE = "REJECTED";';
+17204  put 'end;';
+17205  put 'else ';
+17206  put 'if upcase(NAME) = "TOTORDQ05" then do;';
+17207  put 'ROLE = "REJECTED";';
+17208  put 'end;';
+17209  put 'else ';
+17210  put 'if upcase(NAME) = "TOTORDQ06" then do;';
+17211  put 'ROLE = "REJECTED";';
+17212  put 'end;';
+17213  put 'else ';
+17214  put 'if upcase(NAME) = "TOTORDQ07" then do;';
+17215  put 'ROLE = "REJECTED";';
+17216  put 'end;';
+17217  put 'else ';
+17218  put 'if upcase(NAME) = "TOTORDQ08" then do;';
+17219  put 'ROLE = "REJECTED";';
+17220  put 'end;';
+17221  put 'else ';
+17222  put 'if upcase(NAME) = "TOTORDQ09" then do;';
+17223  put 'ROLE = "REJECTED";';
+17224  put 'end;';
+17225  put 'else ';
+17226  put 'if upcase(NAME) = "TOTORDQ10" then do;';
+17227  put 'ROLE = "REJECTED";';
+17228  put 'end;';
+17229  put 'else ';
+17230  put 'if upcase(NAME) = "TOTORDQ11" then do;';
+17231  put 'ROLE = "REJECTED";';
+17232  put 'end;';
+17233  put 'else ';
+17234  put 'if upcase(NAME) = "TOTORDQ12" then do;';
+17235  put 'ROLE = "REJECTED";';
+17236  put 'end;';
+17237  put 'else ';
+17238  put 'if upcase(NAME) = "TOTORDQ13" then do;';
+17239  put 'ROLE = "REJECTED";';
+17240  put 'end;';
+17241  put 'else ';
+17242  put 'if upcase(NAME) = "TOTORDQ14" then do;';
+17243  put 'ROLE = "REJECTED";';
+17244  put 'end;';
+17245  put 'else ';
+17246  put 'if upcase(NAME) = "TOTORDQ15" then do;';
+17247  put 'ROLE = "REJECTED";';
+17248  put 'end;';
+17249  put 'else ';
+17250  put 'if upcase(NAME) = "TOTORDQ16" then do;';
+17251  put 'ROLE = "REJECTED";';
+17252  put 'end;';
+17253  put 'else ';
+17254  put 'if upcase(NAME) = "TOTORDQ17" then do;';
+17255  put 'ROLE = "REJECTED";';
+17256  put 'end;';
+17257  put 'else ';
+17258  put 'if upcase(NAME) = "TOTORDQ18" then do;';
+17259  put 'ROLE = "REJECTED";';
+17260  put 'end;';
+17261  put 'else ';
+17262  put 'if upcase(NAME) = "TOTORDQ19" then do;';
+17263  put 'ROLE = "REJECTED";';
+17264  put 'end;';
+17265  put 'else ';
+17266  put 'if upcase(NAME) = "TOTORDQ20" then do;';
+17267  put 'ROLE = "REJECTED";';
+17268  put 'end;';
+17269  put 'else ';
+17270  put 'if upcase(NAME) = "TOTORDQ21" then do;';
+17271  put 'ROLE = "REJECTED";';
+17272  put 'end;';
+17273  put 'else ';
+17274  put 'if upcase(NAME) = "TOTORDQ22" then do;';
+17275  put 'ROLE = "REJECTED";';
+17276  put 'end;';
+17277  put 'else ';
+17278  put 'if upcase(NAME) = "UNITSIDD" then do;';
+17279  put 'ROLE = "REJECTED";';
+17280  put 'end;';
+17281  put 'else ';
+17282  put 'if upcase(NAME) = "UNITSLAP" then do;';
+17283  put 'ROLE = "REJECTED";';
+17284  put 'end;';
+17285  put 'else ';
+17286  put 'if upcase(NAME) = "UNTLANPO" then do;';
+17287  put 'ROLE = "REJECTED";';
+17288  put 'end;';
+17289  put 'else ';
+17290  put 'if upcase(NAME) = "_NODE_" then do;';
+17291  put 'ROLE = "SEGMENT";';
+17292  put 'LEVEL = "NOMINAL";';
+17293  put 'end;';
+17294  run;
+
+NOTE: The file X is:
+      Filename=H:\Bia_Priya\Project_PredictiveAnalysis\Workspaces\EMWS2\Tree2\CDELTA_TRAIN.sas,
+      RECFM=V,LRECL=32767,File Size (bytes)=0,
+      Last Modified=20Apr2017:01:21:23,
+      Create Time=19Apr2017:01:41:14
+
+NOTE: 348 records were written to the file X.
+      The minimum record length was 4.
+      The maximum record length was 39.
+NOTE: DATA statement used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.01 seconds
+      
+
+17295  filename x;
+NOTE: Fileref X has been deassigned.
+
+17296  filename emflow "H:\Bia_Priya\Project_PredictiveAnalysis\Workspaces\EMWS2\Tree2\EMFLOWSCORE.sas";
+17297  *------------------------------------------------------------*;
+17298  * Tree2: Scoring DATA data;
+17299  *------------------------------------------------------------*;
+17300  data EMWS2.Tree2_TRAIN
+17301  / view=EMWS2.Tree2_TRAIN
+17302  ;
+17303  set EMWS2.Part_TRAIN
+17304  ;
+17305  %inc emflow;
+NOTE: %INCLUDE (level 1) file EMFLOW is file H:\Bia_Priya\Project_PredictiveAnalysis\Workspaces\EMWS2\Tree2\EMFLOWSCORE.sas.
+17306 +****************************************************************;
+17307 +******             DECISION TREE SCORING CODE             ******;
+17308 +****************************************************************;
+17309 +
+17310 +******         LENGTHS OF NEW CHARACTER VARIABLES         ******;
+17311 +LENGTH F_RESPOND  $   12;
+17312 +LENGTH I_RESPOND  $   12;
+17313 +LENGTH _WARN_  $    4;
+17314 +
+17315 +******              LABELS FOR NEW VARIABLES              ******;
+17316 +label _NODE_ = 'Node' ;
+17317 +label _LEAF_ = 'Leaf' ;
+17318 +label P_RESPOND1 = 'Predicted: RESPOND=1' ;
+17319 +label P_RESPOND0 = 'Predicted: RESPOND=0' ;
+17320 +label Q_RESPOND1 = 'Unadjusted P: RESPOND=1' ;
+17321 +label Q_RESPOND0 = 'Unadjusted P: RESPOND=0' ;
+17322 +label V_RESPOND1 = 'Validated: RESPOND=1' ;
+17323 +label V_RESPOND0 = 'Validated: RESPOND=0' ;
+17324 +label R_RESPOND1 = 'Residual: RESPOND=1' ;
+17325 +label R_RESPOND0 = 'Residual: RESPOND=0' ;
+17326 +label F_RESPOND = 'From: RESPOND' ;
+17327 +label I_RESPOND = 'Into: RESPOND' ;
+17328 +label U_RESPOND = 'Unnormalized Into: RESPOND' ;
+17329 +label _WARN_ = 'Warnings' ;
+17330 +
+17331 +
+17332 +******      TEMPORARY VARIABLES FOR FORMATTED VALUES      ******;
+17333 +LENGTH _ARBFMT_12 $     12; DROP _ARBFMT_12;
+17334 +_ARBFMT_12 = ' '; /* Initialize to avoid warning. */
+17335 +
+17336 +
+17337 +_ARBFMT_12 = PUT( RESPOND , BEST12.);
+17338 + %DMNORMCP( _ARBFMT_12, F_RESPOND );
+17339 +
+17340 +******             ASSIGN OBSERVATION TO NODE             ******;
+17341 +IF  NOT MISSING(DOLL24 ) AND
+17342 +                 121.2 <= DOLL24  THEN DO;
+17343 +  IF  NOT MISSING(DEPT25 ) AND
+17344 +                    32.5 <= DEPT25  THEN DO;
+17345 +    _NODE_  =                    7;
+17346 +    _LEAF_  =                    8;
+17347 +    P_RESPOND1  =      0.4390243902439;
+17348 +    P_RESPOND0  =     0.56097560975609;
+17349 +    Q_RESPOND1  =      0.4390243902439;
+17350 +    Q_RESPOND0  =     0.56097560975609;
+17351 +    V_RESPOND1  =      0.3076923076923;
+17352 +    V_RESPOND0  =     0.69230769230769;
+17353 +    I_RESPOND  = '0' ;
+17354 +    U_RESPOND  =                    0;
+17355 +    END;
+17356 +  ELSE DO;
+17357 +    IF  NOT MISSING(FREQPRCH ) AND
+17358 +                       8.5 <= FREQPRCH  THEN DO;
+17359 +      _NODE_  =                   13;
+17360 +      _LEAF_  =                    7;
+17361 +      P_RESPOND1  =     0.17607413647851;
+17362 +      P_RESPOND0  =     0.82392586352148;
+17363 +      Q_RESPOND1  =     0.17607413647851;
+17364 +      Q_RESPOND0  =     0.82392586352148;
+17365 +      V_RESPOND1  =     0.17874396135265;
+17366 +      V_RESPOND0  =     0.82125603864734;
+17367 +      I_RESPOND  = '0' ;
+17368 +      U_RESPOND  =                    0;
+17369 +      END;
+17370 +    ELSE DO;
+17371 +      _NODE_  =                   12;
+17372 +      _LEAF_  =                    6;
+17373 +      P_RESPOND1  =     0.10013175230566;
+17374 +      P_RESPOND0  =     0.89986824769433;
+17375 +      Q_RESPOND1  =     0.10013175230566;
+17376 +      Q_RESPOND0  =     0.89986824769433;
+17377 +      V_RESPOND1  =       0.089590443686;
+17378 +      V_RESPOND0  =     0.91040955631399;
+17379 +      I_RESPOND  = '0' ;
+17380 +      U_RESPOND  =                    0;
+17381 +      END;
+17382 +    END;
+17383 +  END;
+17384 +ELSE DO;
+17385 +  IF  NOT MISSING(TENURE ) AND
+17386 +    TENURE  <                  1.5 THEN DO;
+17387 +    IF  NOT MISSING(DAYLAST ) AND
+17388 +                      46.5 <= DAYLAST  THEN DO;
+17389 +      _NODE_  =                    9;
+17390 +      _LEAF_  =                    2;
+17391 +      P_RESPOND1  =     0.11111111111111;
+17392 +      P_RESPOND0  =     0.88888888888888;
+17393 +      Q_RESPOND1  =     0.11111111111111;
+17394 +      Q_RESPOND0  =     0.88888888888888;
+17395 +      V_RESPOND1  =                    0;
+17396 +      V_RESPOND0  =                    1;
+17397 +      I_RESPOND  = '0' ;
+17398 +      U_RESPOND  =                    0;
+17399 +      END;
+17400 +    ELSE DO;
+17401 +      _NODE_  =                    8;
+17402 +      _LEAF_  =                    1;
+17403 +      P_RESPOND1  =     0.95454545454545;
+17404 +      P_RESPOND0  =     0.04545454545454;
+17405 +      Q_RESPOND1  =     0.95454545454545;
+17406 +      Q_RESPOND0  =     0.04545454545454;
+17407 +      V_RESPOND1  =                    1;
+17408 +      V_RESPOND0  =                    0;
+17409 +      I_RESPOND  = '1' ;
+17410 +      U_RESPOND  =                    1;
+17411 +      END;
+17412 +    END;
+17413 +  ELSE DO;
+17414 +    IF  NOT MISSING(DOLL24 ) AND
+17415 +                    23.975 <= DOLL24  THEN DO;
+17416 +      IF  NOT MISSING(ACTBUY ) AND
+17417 +                         1.5 <= ACTBUY  THEN DO;
+17418 +        _NODE_  =                   19;
+17419 +        _LEAF_  =                    5;
+17420 +        P_RESPOND1  =     0.10306612486147;
+17421 +        P_RESPOND0  =     0.89693387513852;
+17422 +        Q_RESPOND1  =     0.10306612486147;
+17423 +        Q_RESPOND0  =     0.89693387513852;
+17424 +        V_RESPOND1  =     0.09674922600619;
+17425 +        V_RESPOND0  =      0.9032507739938;
+17426 +        I_RESPOND  = '0' ;
+17427 +        U_RESPOND  =                    0;
+17428 +        END;
+17429 +      ELSE DO;
+17430 +        _NODE_  =                   18;
+17431 +        _LEAF_  =                    4;
+17432 +        P_RESPOND1  =     0.05328917657684;
+17433 +        P_RESPOND0  =     0.94671082342315;
+17434 +        Q_RESPOND1  =     0.05328917657684;
+17435 +        Q_RESPOND0  =     0.94671082342315;
+17436 +        V_RESPOND1  =     0.05952028427598;
+17437 +        V_RESPOND0  =     0.94047971572401;
+17438 +        I_RESPOND  = '0' ;
+17439 +        U_RESPOND  =                    0;
+17440 +        END;
+17441 +      END;
+17442 +    ELSE DO;
+17443 +      _NODE_  =                   10;
+17444 +      _LEAF_  =                    3;
+17445 +      P_RESPOND1  =     0.03609902631033;
+17446 +      P_RESPOND0  =     0.96390097368966;
+17447 +      Q_RESPOND1  =     0.03609902631033;
+17448 +      Q_RESPOND0  =     0.96390097368966;
+17449 +      V_RESPOND1  =     0.03674786591713;
+17450 +      V_RESPOND0  =     0.96325213408286;
+17451 +      I_RESPOND  = '0' ;
+17452 +      U_RESPOND  =                    0;
+17453 +      END;
+17454 +    END;
+17455 +  END;
+17456 +
+17457 +*****  RESIDUALS R_ *************;
+17458 +IF  F_RESPOND  NE '1'
+17459 +AND F_RESPOND  NE '0'  THEN DO;
+17460 +        R_RESPOND1  = .;
+17461 +        R_RESPOND0  = .;
+17462 + END;
+17463 + ELSE DO;
+17464 +       R_RESPOND1  =  -P_RESPOND1 ;
+17465 +       R_RESPOND0  =  -P_RESPOND0 ;
+17466 +       SELECT( F_RESPOND  );
+17467 +          WHEN( '1'  ) R_RESPOND1  = R_RESPOND1  +1;
+17468 +          WHEN( '0'  ) R_RESPOND0  = R_RESPOND0  +1;
+17469 +       END;
+17470 + END;
+17471 +
+17472 +****************************************************************;
+17473 +******          END OF DECISION TREE SCORING CODE         ******;
+17474 +****************************************************************;
+17475 +
+17476 +drop _LEAF_;
+NOTE: %INCLUDE (level 1) ending.
+17477  run;
+
+NOTE: DATA STEP view saved on file EMWS2.TREE2_TRAIN.
+NOTE: A stored DATA STEP view cannot run under a different operating system.
+NOTE: DATA statement used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.00 seconds
+      
+
+17478  quit;
+17479  filename emflow;
+NOTE: Fileref EMFLOW has been deassigned.
+
+17480  filename emflow "H:\Bia_Priya\Project_PredictiveAnalysis\Workspaces\EMWS2\Tree2\EMFLOWSCORE.sas";
+17481  *------------------------------------------------------------*;
+17482  * Tree2: Scoring VALIDATE data;
+17483  *------------------------------------------------------------*;
+17484  data EMWS2.Tree2_VALIDATE
+17485  / view=EMWS2.Tree2_VALIDATE
+17486  ;
+17487  set EMWS2.Part_VALIDATE
+17488  ;
+17489  %inc emflow;
+NOTE: %INCLUDE (level 1) file EMFLOW is file H:\Bia_Priya\Project_PredictiveAnalysis\Workspaces\EMWS2\Tree2\EMFLOWSCORE.sas.
+17490 +****************************************************************;
+17491 +******             DECISION TREE SCORING CODE             ******;
+17492 +****************************************************************;
+17493 +
+17494 +******         LENGTHS OF NEW CHARACTER VARIABLES         ******;
+17495 +LENGTH F_RESPOND  $   12;
+17496 +LENGTH I_RESPOND  $   12;
+17497 +LENGTH _WARN_  $    4;
+17498 +
+17499 +******              LABELS FOR NEW VARIABLES              ******;
+17500 +label _NODE_ = 'Node' ;
+17501 +label _LEAF_ = 'Leaf' ;
+17502 +label P_RESPOND1 = 'Predicted: RESPOND=1' ;
+17503 +label P_RESPOND0 = 'Predicted: RESPOND=0' ;
+17504 +label Q_RESPOND1 = 'Unadjusted P: RESPOND=1' ;
+17505 +label Q_RESPOND0 = 'Unadjusted P: RESPOND=0' ;
+17506 +label V_RESPOND1 = 'Validated: RESPOND=1' ;
+17507 +label V_RESPOND0 = 'Validated: RESPOND=0' ;
+17508 +label R_RESPOND1 = 'Residual: RESPOND=1' ;
+17509 +label R_RESPOND0 = 'Residual: RESPOND=0' ;
+17510 +label F_RESPOND = 'From: RESPOND' ;
+17511 +label I_RESPOND = 'Into: RESPOND' ;
+17512 +label U_RESPOND = 'Unnormalized Into: RESPOND' ;
+17513 +label _WARN_ = 'Warnings' ;
+17514 +
+17515 +
+17516 +******      TEMPORARY VARIABLES FOR FORMATTED VALUES      ******;
+17517 +LENGTH _ARBFMT_12 $     12; DROP _ARBFMT_12;
+17518 +_ARBFMT_12 = ' '; /* Initialize to avoid warning. */
+17519 +
+17520 +
+17521 +_ARBFMT_12 = PUT( RESPOND , BEST12.);
+17522 + %DMNORMCP( _ARBFMT_12, F_RESPOND );
+17523 +
+17524 +******             ASSIGN OBSERVATION TO NODE             ******;
+17525 +IF  NOT MISSING(DOLL24 ) AND
+17526 +                 121.2 <= DOLL24  THEN DO;
+17527 +  IF  NOT MISSING(DEPT25 ) AND
+17528 +                    32.5 <= DEPT25  THEN DO;
+17529 +    _NODE_  =                    7;
+17530 +    _LEAF_  =                    8;
+17531 +    P_RESPOND1  =      0.4390243902439;
+17532 +    P_RESPOND0  =     0.56097560975609;
+17533 +    Q_RESPOND1  =      0.4390243902439;
+17534 +    Q_RESPOND0  =     0.56097560975609;
+17535 +    V_RESPOND1  =      0.3076923076923;
+17536 +    V_RESPOND0  =     0.69230769230769;
+17537 +    I_RESPOND  = '0' ;
+17538 +    U_RESPOND  =                    0;
+17539 +    END;
+17540 +  ELSE DO;
+17541 +    IF  NOT MISSING(FREQPRCH ) AND
+17542 +                       8.5 <= FREQPRCH  THEN DO;
+17543 +      _NODE_  =                   13;
+17544 +      _LEAF_  =                    7;
+17545 +      P_RESPOND1  =     0.17607413647851;
+17546 +      P_RESPOND0  =     0.82392586352148;
+17547 +      Q_RESPOND1  =     0.17607413647851;
+17548 +      Q_RESPOND0  =     0.82392586352148;
+17549 +      V_RESPOND1  =     0.17874396135265;
+17550 +      V_RESPOND0  =     0.82125603864734;
+17551 +      I_RESPOND  = '0' ;
+17552 +      U_RESPOND  =                    0;
+17553 +      END;
+17554 +    ELSE DO;
+17555 +      _NODE_  =                   12;
+17556 +      _LEAF_  =                    6;
+17557 +      P_RESPOND1  =     0.10013175230566;
+17558 +      P_RESPOND0  =     0.89986824769433;
+17559 +      Q_RESPOND1  =     0.10013175230566;
+17560 +      Q_RESPOND0  =     0.89986824769433;
+17561 +      V_RESPOND1  =       0.089590443686;
+17562 +      V_RESPOND0  =     0.91040955631399;
+17563 +      I_RESPOND  = '0' ;
+17564 +      U_RESPOND  =                    0;
+17565 +      END;
+17566 +    END;
+17567 +  END;
+17568 +ELSE DO;
+17569 +  IF  NOT MISSING(TENURE ) AND
+17570 +    TENURE  <                  1.5 THEN DO;
+17571 +    IF  NOT MISSING(DAYLAST ) AND
+17572 +                      46.5 <= DAYLAST  THEN DO;
+17573 +      _NODE_  =                    9;
+17574 +      _LEAF_  =                    2;
+17575 +      P_RESPOND1  =     0.11111111111111;
+17576 +      P_RESPOND0  =     0.88888888888888;
+17577 +      Q_RESPOND1  =     0.11111111111111;
+17578 +      Q_RESPOND0  =     0.88888888888888;
+17579 +      V_RESPOND1  =                    0;
+17580 +      V_RESPOND0  =                    1;
+17581 +      I_RESPOND  = '0' ;
+17582 +      U_RESPOND  =                    0;
+17583 +      END;
+17584 +    ELSE DO;
+17585 +      _NODE_  =                    8;
+17586 +      _LEAF_  =                    1;
+17587 +      P_RESPOND1  =     0.95454545454545;
+17588 +      P_RESPOND0  =     0.04545454545454;
+17589 +      Q_RESPOND1  =     0.95454545454545;
+17590 +      Q_RESPOND0  =     0.04545454545454;
+17591 +      V_RESPOND1  =                    1;
+17592 +      V_RESPOND0  =                    0;
+17593 +      I_RESPOND  = '1' ;
+17594 +      U_RESPOND  =                    1;
+17595 +      END;
+17596 +    END;
+17597 +  ELSE DO;
+17598 +    IF  NOT MISSING(DOLL24 ) AND
+17599 +                    23.975 <= DOLL24  THEN DO;
+17600 +      IF  NOT MISSING(ACTBUY ) AND
+17601 +                         1.5 <= ACTBUY  THEN DO;
+17602 +        _NODE_  =                   19;
+17603 +        _LEAF_  =                    5;
+17604 +        P_RESPOND1  =     0.10306612486147;
+17605 +        P_RESPOND0  =     0.89693387513852;
+17606 +        Q_RESPOND1  =     0.10306612486147;
+17607 +        Q_RESPOND0  =     0.89693387513852;
+17608 +        V_RESPOND1  =     0.09674922600619;
+17609 +        V_RESPOND0  =      0.9032507739938;
+17610 +        I_RESPOND  = '0' ;
+17611 +        U_RESPOND  =                    0;
+17612 +        END;
+17613 +      ELSE DO;
+17614 +        _NODE_  =                   18;
+17615 +        _LEAF_  =                    4;
+17616 +        P_RESPOND1  =     0.05328917657684;
+17617 +        P_RESPOND0  =     0.94671082342315;
+17618 +        Q_RESPOND1  =     0.05328917657684;
+17619 +        Q_RESPOND0  =     0.94671082342315;
+17620 +        V_RESPOND1  =     0.05952028427598;
+17621 +        V_RESPOND0  =     0.94047971572401;
+17622 +        I_RESPOND  = '0' ;
+17623 +        U_RESPOND  =                    0;
+17624 +        END;
+17625 +      END;
+17626 +    ELSE DO;
+17627 +      _NODE_  =                   10;
+17628 +      _LEAF_  =                    3;
+17629 +      P_RESPOND1  =     0.03609902631033;
+17630 +      P_RESPOND0  =     0.96390097368966;
+17631 +      Q_RESPOND1  =     0.03609902631033;
+17632 +      Q_RESPOND0  =     0.96390097368966;
+17633 +      V_RESPOND1  =     0.03674786591713;
+17634 +      V_RESPOND0  =     0.96325213408286;
+17635 +      I_RESPOND  = '0' ;
+17636 +      U_RESPOND  =                    0;
+17637 +      END;
+17638 +    END;
+17639 +  END;
+17640 +
+17641 +*****  RESIDUALS R_ *************;
+17642 +IF  F_RESPOND  NE '1'
+17643 +AND F_RESPOND  NE '0'  THEN DO;
+17644 +        R_RESPOND1  = .;
+17645 +        R_RESPOND0  = .;
+17646 + END;
+17647 + ELSE DO;
+17648 +       R_RESPOND1  =  -P_RESPOND1 ;
+17649 +       R_RESPOND0  =  -P_RESPOND0 ;
+17650 +       SELECT( F_RESPOND  );
+17651 +          WHEN( '1'  ) R_RESPOND1  = R_RESPOND1  +1;
+17652 +          WHEN( '0'  ) R_RESPOND0  = R_RESPOND0  +1;
+17653 +       END;
+17654 + END;
+17655 +
+17656 +****************************************************************;
+17657 +******          END OF DECISION TREE SCORING CODE         ******;
+17658 +****************************************************************;
+17659 +
+17660 +drop _LEAF_;
+NOTE: %INCLUDE (level 1) ending.
+17661  run;
+
+NOTE: DATA STEP view saved on file EMWS2.TREE2_VALIDATE.
+NOTE: A stored DATA STEP view cannot run under a different operating system.
+NOTE: DATA statement used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.00 seconds
+      
+
+17662  quit;
+17663  filename emflow;
+NOTE: Fileref EMFLOW has been deassigned.
+
+NOTE: View EMWS2.TREE2_TRAIN.VIEW used (Total process time):
+      real time           0.04 seconds
+      cpu time            0.03 seconds
+      
+17665  proc sort data=WORK.EM_USER_REPORT;
+17666  by ID VIEW;
+17667  run;
+
+NOTE: There were 132 observations read from the data set WORK.EM_USER_REPORT.
+NOTE: The data set WORK.EM_USER_REPORT has 132 observations and 4 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+17668  *------------------------------------------------------------*;
+17669  * Tree2: Computing metadata for TRAIN data;
+17670  *------------------------------------------------------------*;
+
+NOTE: View EMWS2.TREE2_TRAIN.VIEW used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.03 seconds
+      
+18366  data WORK.MODELTEMP_INFO;
+18367  set EMWS2.Tree2_EMINFO;
+18368  where DATA='Tree2' and KEY ^in('DECDATA', 'DECMETA', 'IMPORTANCE', 'MODEL');
+18369  run;
+
+NOTE: There were 0 observations read from the data set EMWS2.TREE2_EMINFO.
+      WHERE (DATA='Tree2') and KEY not in ('DECDATA', 'DECMETA', 'IMPORTANCE', 'MODEL');
+NOTE: The data set WORK.MODELTEMP_INFO has 0 observations and 3 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+18370  data EMWS2.Tree2_EMINFO;
+18371  length TARGET KEY $32 DATA $43;
+18372  input TARGET KEY DATA $;
+18373  cards;
+
+NOTE: The data set EMWS2.TREE2_EMINFO has 3 observations and 3 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.01 seconds
+      
+
+18377  run;
+18378  data EMWS2.Tree2_EMINFO;
+18379  set EMWS2.Tree2_EMINFO WORK.MODELTEMP_INFO;
+18380  run;
+
+NOTE: There were 3 observations read from the data set EMWS2.TREE2_EMINFO.
+NOTE: There were 0 observations read from the data set WORK.MODELTEMP_INFO.
+NOTE: The data set EMWS2.TREE2_EMINFO has 3 observations and 3 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.01 seconds
+      
+
+18381  proc sort data = EMWS2.Tree2_EMINFO NOTHREADS;
+18382  by TARGET KEY;
+18383  run;
+
+NOTE: There were 3 observations read from the data set EMWS2.TREE2_EMINFO.
+NOTE: The data set EMWS2.TREE2_EMINFO has 3 observations and 3 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.01 seconds
+      
+
+18384  proc sort data = EMWS2.Ids_EMINFO OUT=WORK.SORTEDEMINFO NOTHREADS;
+18385  by TARGET KEY;
+18386  run;
+
+NOTE: There were 4 observations read from the data set EMWS2.IDS_EMINFO.
+NOTE: The data set WORK.SORTEDEMINFO has 4 observations and 3 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+18387  proc sort data = EMWS2.Tree2_EMINFO OUT=WORK.TEMP_INFO NOTHREADS;
+18388  by TARGET KEY;
+18389  run;
+
+NOTE: Input data set is already sorted; it has been copied to the output data set.
+NOTE: There were 3 observations read from the data set EMWS2.TREE2_EMINFO.
+NOTE: The data set WORK.TEMP_INFO has 3 observations and 3 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+18390  data EMWS2.Tree2_EMINFO;
+18391  merge WORK.SORTEDEMINFO WORK.TEMP_INFO;
+18392  by TARGET KEY;
+18393  run;
+
+NOTE: There were 4 observations read from the data set WORK.SORTEDEMINFO.
+NOTE: There were 3 observations read from the data set WORK.TEMP_INFO.
+NOTE: The data set EMWS2.TREE2_EMINFO has 5 observations and 3 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.00 seconds
+      
+
+18394  proc datasets lib=work nolist;
+18395  delete TEMP_INFO SORTEDEMINFO;
+18396  run;
+
+NOTE: Deleting WORK.TEMP_INFO (memtype=DATA).
+NOTE: Deleting WORK.SORTEDEMINFO (memtype=DATA).
+18397  quit;
+
+NOTE: PROCEDURE DATASETS used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+NOTE: View EMWS2.TREE2_TRAIN.VIEW used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.03 seconds
+      
+NOTE: View EMWS2.TREE2_VALIDATE.VIEW used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.03 seconds
+      

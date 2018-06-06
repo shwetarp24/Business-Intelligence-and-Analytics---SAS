@@ -1,0 +1,120 @@
+*------------------------------------------------------------*
+* Score Log
+Date:                April 23, 2017
+Time:                02:06:42
+*------------------------------------------------------------*
+11198  *------------------------------------------------------------*;
+11199  * Assoc2: Scoring DATA data;
+11200  *------------------------------------------------------------*;
+11201  data EMWS4.Assoc2_TRANSACTION
+11202  / view=EMWS4.Assoc2_TRANSACTION
+11203  ;
+11204  set EMWS4.Ids_DATA
+11205  ;
+11206  run;
+
+NOTE: DATA STEP view saved on file EMWS4.ASSOC2_TRANSACTION.
+NOTE: A stored DATA STEP view cannot run under a different operating system.
+NOTE: View EMWS4.IDS_DATA.VIEW used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.03 seconds
+      
+NOTE: DATA statement used (Total process time):
+      real time           0.06 seconds
+      cpu time            0.06 seconds
+      
+
+11207  quit;
+
+11208  *------------------------------------------------------------*;
+11209  * Assoc2: Computing metadata for TRAIN data;
+11210  *------------------------------------------------------------*;
+
+11550  data EMWS4.Assoc2_EMINFO;
+11551  length TARGET KEY $32 DATA $43;
+11552  TARGET='';
+11553  KEY='ASSOCIATION';
+11554  DATA="Assoc2";
+11555  output;
+11556  run;
+
+NOTE: The data set EMWS4.ASSOC2_EMINFO has 1 observations and 3 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+      
+
+11557  *------------------------------------------------------------*;
+11558  * Assoc2: Computing metadata for TRANSACTION data;
+11559  *------------------------------------------------------------*;
+
+NOTE: View EMWS4.ASSOC2_TRANSACTION.VIEW used (Total process time):
+      real time           0.06 seconds
+      cpu time            0.06 seconds
+      
+11891  data EMWS4.Assoc2_EMINFO;
+11892  length TARGET KEY $32 DATA $43;
+11893  TARGET='';
+11894  KEY='ASSOCIATION';
+11895  DATA="Assoc2";
+11896  output;
+11897  run;
+
+NOTE: The data set EMWS4.ASSOC2_EMINFO has 1 observations and 3 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.00 seconds
+      
+
+11898  proc sort data = EMWS4.Ids_EMINFO OUT=WORK.SORTEDEMINFO NOTHREADS;
+11899  by TARGET KEY;
+11900  run;
+
+NOTE: There were 1 observations read from the data set EMWS4.IDS_EMINFO.
+NOTE: The data set WORK.SORTEDEMINFO has 1 observations and 3 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+11901  proc sort data = EMWS4.Assoc2_EMINFO OUT=WORK.TEMP_INFO NOTHREADS;
+11902  by TARGET KEY;
+11903  run;
+
+NOTE: There were 1 observations read from the data set EMWS4.ASSOC2_EMINFO.
+NOTE: The data set WORK.TEMP_INFO has 1 observations and 3 variables.
+NOTE: PROCEDURE SORT used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+11904  data EMWS4.Assoc2_EMINFO;
+11905  merge WORK.SORTEDEMINFO WORK.TEMP_INFO;
+11906  by TARGET KEY;
+11907  run;
+
+NOTE: There were 1 observations read from the data set WORK.SORTEDEMINFO.
+NOTE: There were 1 observations read from the data set WORK.TEMP_INFO.
+NOTE: The data set EMWS4.ASSOC2_EMINFO has 2 observations and 3 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.01 seconds
+      
+
+11908  proc datasets lib=work nolist;
+11909  delete TEMP_INFO SORTEDEMINFO;
+11910  run;
+
+NOTE: Deleting WORK.TEMP_INFO (memtype=DATA).
+NOTE: Deleting WORK.SORTEDEMINFO (memtype=DATA).
+11911  quit;
+
+NOTE: PROCEDURE DATASETS used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+NOTE: View EMWS4.ASSOC2_TRANSACTION.VIEW used (Total process time):
+      real time           0.06 seconds
+      cpu time            0.06 seconds
+      

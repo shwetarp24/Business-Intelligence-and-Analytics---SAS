@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?><_ROOT_  NumberOfReportedLevels="1E-6" NormalizeReportingVariables="Y" DecileBin="20" LiftEpsilon="1E-6"
+ ProfitEpsilon="1E-6" RoiEpsilon="1E-6" ScoreDistBin="20" RocChart="Y" RocEpsilon="0.01"
+ AssessAllTargetLevels="N" SelectionData="DEFAULT" HPCriteria="DEFAULT" SelectionTable="TRAIN"
+ SelectionCriteria="DEFAULT" SelectionDepth="10" NumberofBins="20" RecomputeAssess="N"
+ TargetName="RESPOND" ModelId="Tree2" ModelDescription="Tree2" ModelCriteria="Valid: Misclassification Rate"
+ ForceRun="N" RunAction="Train" Component="ModelCompare" RawCreateTime="1808185595"
+ CreateTime="19APR2017:01:46:35" RunId="ae2c9fe6-4ec0-4f71-b9b4-a9d08bdb9f68" StatisticUsed="_VMISC_"
+ TargetLabel="response target" RawLastTimeRun="1808276764.1" RawRunTime="10.796999931"
+ LastTimeRun="20APR2017:03:06:04" RunTime="0 Hr. 0 Min. 10.80 Sec.">
+<VARIABLEPROPERTIES/>
+<FILEPROPERTIES/>
+</_ROOT_>

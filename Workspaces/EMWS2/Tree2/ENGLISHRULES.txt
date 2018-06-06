@@ -1,0 +1,94 @@
+*------------------------------------------------------------*
+ Node = 7
+*------------------------------------------------------------*
+if food >= 32.5
+AND $ last 24 months >= 121.2
+then 
+ Tree Node Identifier   = 7
+ Number of Observations = 82
+ Predicted: RESPOND=1 = 0.44
+ Predicted: RESPOND=0 = 0.56
+ 
+*------------------------------------------------------------*
+ Node = 8
+*------------------------------------------------------------*
+if months since 1st < 1.5
+AND days since last < 46.5 or MISSING
+AND $ last 24 months < 121.2 or MISSING
+then 
+ Tree Node Identifier   = 8
+ Number of Observations = 22
+ Predicted: RESPOND=1 = 0.95
+ Predicted: RESPOND=0 = 0.05
+ 
+*------------------------------------------------------------*
+ Node = 9
+*------------------------------------------------------------*
+if months since 1st < 1.5
+AND days since last >= 46.5
+AND $ last 24 months < 121.2 or MISSING
+then 
+ Tree Node Identifier   = 9
+ Number of Observations = 9
+ Predicted: RESPOND=1 = 0.11
+ Predicted: RESPOND=0 = 0.89
+ 
+*------------------------------------------------------------*
+ Node = 10
+*------------------------------------------------------------*
+if months since 1st >= 1.5 or MISSING
+AND $ last 24 months < 23.975 or MISSING
+then 
+ Tree Node Identifier   = 10
+ Number of Observations = 19308
+ Predicted: RESPOND=1 = 0.04
+ Predicted: RESPOND=0 = 0.96
+ 
+*------------------------------------------------------------*
+ Node = 12
+*------------------------------------------------------------*
+if lifetime orders < 8.5 or MISSING
+AND food < 32.5 or MISSING
+AND $ last 24 months >= 121.2
+then 
+ Tree Node Identifier   = 12
+ Number of Observations = 2277
+ Predicted: RESPOND=1 = 0.10
+ Predicted: RESPOND=0 = 0.90
+ 
+*------------------------------------------------------------*
+ Node = 13
+*------------------------------------------------------------*
+if lifetime orders >= 8.5
+AND food < 32.5 or MISSING
+AND $ last 24 months >= 121.2
+then 
+ Tree Node Identifier   = 13
+ Number of Observations = 1187
+ Predicted: RESPOND=1 = 0.18
+ Predicted: RESPOND=0 = 0.82
+ 
+*------------------------------------------------------------*
+ Node = 18
+*------------------------------------------------------------*
+if num qrtrs w/buy < 1.5 or MISSING
+AND months since 1st >= 1.5 or MISSING
+AND $ last 24 months < 121.2 AND $ last 24 months >= 23.975
+then 
+ Tree Node Identifier   = 18
+ Number of Observations = 6643
+ Predicted: RESPOND=1 = 0.05
+ Predicted: RESPOND=0 = 0.95
+ 
+*------------------------------------------------------------*
+ Node = 19
+*------------------------------------------------------------*
+if num qrtrs w/buy >= 1.5
+AND months since 1st >= 1.5 or MISSING
+AND $ last 24 months < 121.2 AND $ last 24 months >= 23.975
+then 
+ Tree Node Identifier   = 19
+ Number of Observations = 2707
+ Predicted: RESPOND=1 = 0.10
+ Predicted: RESPOND=0 = 0.90
+ 

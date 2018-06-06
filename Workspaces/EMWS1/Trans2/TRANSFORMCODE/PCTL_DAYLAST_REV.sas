@@ -1,0 +1,18 @@
+label PCTL_DAYLAST_REV = 'Transformed DAYLAST_REV';
+length PCTL_DAYLAST_REV $36;
+if (DAYLAST_REV eq .) then PCTL_DAYLAST_REV="";
+else
+if (DAYLAST_REV < -1826) then
+PCTL_DAYLAST_REV = "01:low--1826";
+else
+if (DAYLAST_REV >= -1826 and DAYLAST_REV < -1008) then
+PCTL_DAYLAST_REV = "02:-1826--1008";
+else
+if (DAYLAST_REV >= -1008 and DAYLAST_REV < -573) then
+PCTL_DAYLAST_REV = "03:-1008--573";
+else
+if (DAYLAST_REV >= -573 and DAYLAST_REV < -256) then
+PCTL_DAYLAST_REV = "04:-573--256";
+else
+if (DAYLAST_REV >= -256) then
+PCTL_DAYLAST_REV = "05:-256-high";

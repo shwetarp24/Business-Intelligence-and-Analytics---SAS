@@ -1,0 +1,65 @@
+*------------------------------------------------------------*
+* Score Log
+Date:                April 21, 2017
+Time:                01:52:17
+*------------------------------------------------------------*
+11623  *------------------------------------------------------------*;
+11624  * Ids4: Computing metadata for DATA data;
+11625  *------------------------------------------------------------*;
+
+NOTE: View EMWS1.IDS4_DATA.VIEW used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.03 seconds
+      
+11626  data EMWS1.Ids4_EMINFO;
+11627  length TARGET KEY $32 DATA $43;
+11628  TARGET="";
+11629  KEY="IDSTABLE";
+11630  DATA="BIA.CATALOG2010";
+11631  output;
+11632  TARGET="ORDERSIZE";
+11633  KEY="DECDATA";
+11634  DATA="EMWS1.Ids4_ORDERSIZE_DD";
+11635  output;
+11636  TARGET="ORDERSIZE";
+11637  KEY="DECMETA";
+11638  DATA="EMWS1.Ids4_ORDERSIZE_DM";
+11639  output;
+11640  TARGET="RESPOND";
+11641  KEY="DECDATA";
+11642  DATA="EMWS1.Ids4_RESPOND_DD";
+11643  output;
+11644  TARGET="RESPOND";
+11645  KEY="DECMETA";
+11646  DATA="EMWS1.Ids4_RESPOND_DM";
+11647  output;
+11648  TARGET="";
+11649  KEY="STATS";
+11650  DATA="EMWS1.Ids4_EMSTATDEFAULT";
+11651  output;
+11652  run;
+
+NOTE: The data set EMWS1.IDS4_EMINFO has 6 observations and 3 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.01 seconds
+      
+
+NOTE: View EMWS1.IDS4_DATA.VIEW used (Total process time):
+      real time           0.03 seconds
+      cpu time            0.03 seconds
+      
+11653  data EMWS1.Ids4_CMeta_DATA;
+11654  set EMWS1.Ids4_VariableSet;
+11655  drop DROP;
+11656  where DROP='N';
+11657  run;
+
+NOTE: There were 98 observations read from the data set EMWS1.IDS4_VARIABLESET.
+      WHERE DROP='N';
+NOTE: The data set EMWS1.IDS4_CMETA_DATA has 98 observations and 20 variables.
+NOTE: DATA statement used (Total process time):
+      real time           0.04 seconds
+      cpu time            0.00 seconds
+      
+

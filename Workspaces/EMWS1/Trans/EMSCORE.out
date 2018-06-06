@@ -1,0 +1,10 @@
+ 
+                                                                                                                                                                                                                                                                
+ 
+Formula Transformations
+(maximum 500 observations printed)
+
+ Variable               Measurement
+   Name        Role        Level        Formula
+
+DAYLAST_REV    INPUT     INTERVAL      -1*DAYLAST

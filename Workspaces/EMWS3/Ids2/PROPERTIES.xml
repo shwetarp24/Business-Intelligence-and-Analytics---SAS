@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?><_ROOT_  DataSource="organics" Scope="LOCAL" Role="RAW" Library="BIA" Table="ORGANICS" NCols="13"
+ NObs="22223" NBytes="2171904" Segment="" DataSourceRole="RAW" OutputType="VIEW" ForceRun="N"
+ ComputeStatistics="N" DataSelection="DATASOURCE" NewTable="" MetaAdvisor="BASIC"
+ ApplyIntervalLevelLowerLimit="Y" IntervalLowerLimit="20" ApplyMaxPercentMissing="Y"
+ MaxPercentMissing="50" ApplyMaxClassLevels="Y" MaxClassLevels="20" IdentifyEmptyColumns="Y"
+ VariableValidation="STRICT" NewVariableRole="REJECT" DropMapVariables="Y" DsId="organics"
+ DsSampleName="" DsSampleSizeType="" DsSampleSize="" DsCreatedBy="pkumari1" DsCreateDate="1808188155.9"
+ DsModifiedBy="pkumari1" DsModifyDate="1808188156" DsScope="LOCAL" Sample="D" SampleSizeType="PERCENT"
+ SampleSizePercent="20" SampleSizeObs="10000" DBPassThrough="Y" RunAction="Train"
+ Component="DataSource" RawCreateTime="1808266117.3" CreateTime="20APR2017:00:08:37"
+ Description="" Data="BIA.ORGANICS" CMeta="WORK.M1ODCP_D" RunId="cafea873-0856-4bb8-90ab-af86f3609d85"
+>
+<VARIABLEPROPERTIES/>
+<FILEPROPERTIES/>
+</_ROOT_>

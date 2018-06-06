@@ -1,0 +1,94 @@
+*------------------------------------------------------------*
+* Training Log
+Date:                May 07, 2017
+Time:                22:16:49
+*------------------------------------------------------------*
+14715  proc freq data=EMWS1.EMCODE_VariableSet noprint;
+14716  table ROLE*LEVEL/out=WORK.EMCODEMETA;
+14717  run;
+
+NOTE: There were 98 observations read from the data set EMWS1.EMCODE_VARIABLESET.
+NOTE: The data set WORK.EMCODEMETA has 8 observations and 4 variables.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+
+14718  proc print data=WORK.EMCODEMETA label noobs;
+14719  var ROLE LEVEL COUNT;
+14720  label ROLE = "%sysfunc(sasmsg(sashelp.dmine, meta_role_vlabel, NOQUOTE))" LEVEL = "%sysfunc(sasmsg(sashelp.dmine, meta_level_vlabel, NOQUOTE))" COUNT = "%sysfunc(sasmsg(sashelp.dmine, rpt_count_vlabel, NOQUOTE))";
+14721  title9 ' ';
+14722  title10 "%sysfunc(sasmsg(sashelp.dmine, rpt_varSummary_title  , NOQUOTE))";
+14723  run;
+
+NOTE: There were 8 observations read from the data set WORK.EMCODEMETA.
+NOTE: The PROCEDURE PRINT printed page 1.
+NOTE: PROCEDURE PRINT used (Total process time):
+      real time           0.00 seconds
+      cpu time            0.00 seconds
+      
+
+14724  title10;
+
+14725  %let EMEXCEPTIONSTRING=;
+14726  %let syscc = 0;
+PERFORMANCE  DETAILS
+15085  *------------------------------------------------------------*;
+15086  * EMCODE: Generation of macros and macro variables;
+15087  * To see the code generated, set the EM_DEBUG macro variable to SOURCE or _ALL_;
+15088  *------------------------------------------------------------*;
+
+15089  %let syscc = 0;
+15090  %inc "\\filer.uncc.edu\home\pkumari1\Bia_Priya\Project_PredictiveAnalysis\Workspaces\EMWS1\EMCODE\EMTRAINCODE.sas";
+NOTE: %INCLUDE (level 1) file \\filer.uncc.edu\home\pkumari1\Bia_Priya\Project_PredictiveAnalysis\Workspaces\EMWS1\EMCODE\EMTRAINCODE.sas is file \\filer.uncc.edu\home\pkumari1\Bia_Priya\Project_PredictiveAnalysis\Workspaces\EMWS1\EMCODE\EMTRAINCODE.sas.
+15091 +proc univariate data=&em_import_data plot;
+15092 +var unitsidd;
+15093 +run;
+
+NOTE: View EMWS1.IDS4_DATA.VIEW used (Total process time):
+      real time           0.36 seconds
+      cpu time            0.17 seconds
+      
+NOTE: There were 48356 observations read from the data set BIA.CATALOG2010.
+NOTE: The PROCEDURE UNIVARIATE printed page 2.
+NOTE: PROCEDURE UNIVARIATE used (Total process time):
+      real time           0.37 seconds
+      cpu time            0.18 seconds
+      
+
+15094 +proc univariate data=&em_import_data plot;
+15095 +var buyprop;
+15096 +run;
+
+NOTE: View EMWS1.IDS4_DATA.VIEW used (Total process time):
+      real time           0.15 seconds
+      cpu time            0.15 seconds
+      
+NOTE: There were 48356 observations read from the data set BIA.CATALOG2010.
+NOTE: The PROCEDURE UNIVARIATE printed page 3.
+NOTE: PROCEDURE UNIVARIATE used (Total process time):
+      real time           0.15 seconds
+      cpu time            0.15 seconds
+      
+
+NOTE: %INCLUDE (level 1) ending.
+15097  *------------------------------------------------------------*;
+15098  * Close any missing semi colons;
+15099  *------------------------------------------------------------*;
+15100  ;
+15101  ;
+15102  ;
+15103  ;
+15104  quit;
+15105  *------------------------------------------------------------*;
+15106  * Close any unbalanced quotes;
+15107  *------------------------------------------------------------*;
+15108  /*; *"; *'; */
+15109  ;
+15110  run;
+15111  quit;
+15112  /* Reset EM Options */
+15113  options formchar="|----|+|---+=|-/\<>*";
+15114  options nocenter ls=256 ps=10000;
+15115  goptions reset=all device=GIF NODISPLAY;
+
